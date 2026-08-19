@@ -42,42 +42,6 @@
       <url>${site.target.url}/</url>
     </site>
   </distributionManagement>
-  <properties>
-    <!-- inventory-parent (which defines this) now lives OUTSIDE the
-         workspace, and Quarkus's bootstrap resolves workspace module
-         versions from raw poms — so ${revision} must be resolvable here.
-         -Drevision=X.Y.Z on the command line still overrides it. -->
-    <revision>0.0.1-SNAPSHOT</revision>
-
-    <iblog.version>0.13.2-SNAPSHOT</iblog.version>
-    <ib.exceptions.version>66-SNAPSHOT</ib.exceptions.version>
-  </properties>
-  <!-- <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.infrastructurebuilder.util.logging</groupId>
-        <artifactId>iblogconfig</artifactId>
-        <version>${iblog.version}</version>
-        <classifier>debug</classifier>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.infrastructurebuilder.util.logging</groupId>
-        <artifactId>iblog-JDKSL-component</artifactId>
-        <version>${iblog.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.infrastructurebuilder.util.logging</groupId>
-        <artifactId>iblog-noop-component</artifactId>
-        <version>${iblog.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.infrastructurebuilder.meredith.api</groupId>
-        <artifactId>meredith-api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement> -->
   <dependencies>
     <dependency>
       <groupId>org.json</groupId>
@@ -91,30 +55,6 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>org.infrastructurebuilder</groupId>
-      <artifactId>ibcore</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-rx-java3</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-junit5-rx-java3</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-rx-java3-gen</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.infrastructurebuilder</groupId>
-      <artifactId>ibcore-vertx-json</artifactId>
-    </dependency>
--->
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
