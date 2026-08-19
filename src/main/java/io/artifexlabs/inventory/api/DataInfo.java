@@ -1,0 +1,52 @@
+/*
+ * @formatter:off
+ * Copyright © 2019 admin (admin@artifexlabs.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * @formatter:on
+ */
+package io.artifexlabs.inventory.api;
+
+import static java.util.Objects.requireNonNull;
+
+import io.vertx.core.json.JsonObject;
+
+/**
+ * Describes what kind of thing an {@link Item} is. A plain physical object is
+ * {@link #OBJECT} (equivalently, an Item with no DataInfo at all). For data
+ * items it records the medium, whether the data can change (a disk) or not (a
+ * write-once CD), and whether it is an archive acting as a sub-container for
+ * data on the same medium.
+ *
+ * @author mykel
+ *
+ */
+public record DataInfo(MediaKind kind, boolean mutable, boolean archive) {
+
+  /** A plain physical object; mutable/archive do not apply. */
+  public final static DataInfo OBJECT = new DataInfo(MediaKind.OBJECT, false, false);
+
+  public DataInfo {
+    requireNonNull(kind, "kind");
+  }
+
+  public JsonObject toJson() {
+    return new JsonObject().put("kind", kind.name()).put("mutable", mutable).put("archive", archive);
+  }
+
+  public static DataInfo fromJson(JsonObject j) {
+    return j == null ? null
+        : new DataInfo(MediaKind.valueOf(j.getString("kind")), Boolean.TRUE.equals(j.getBoolean("mutable")),
+            Boolean.TRUE.equals(j.getBoolean("archive")));
+  }
+}
