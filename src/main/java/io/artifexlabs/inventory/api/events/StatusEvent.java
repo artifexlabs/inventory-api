@@ -30,9 +30,9 @@ import java.util.Optional;
  * apart the way a log line and a metric do.
  *
  * <p>
- * <b>Not audit.</b> {@link AuditEvent}s are committed domain facts, durable, the record of what happened. StatusEvents
- * are operational outcomes — mostly failures and refusals — that are best-effort, transient, and exist so a human hears
- * about a problem without reading log files. A single action may produce both.
+ * <b>Not audit.</b> {@link io.artifexlabs.inventory.api.AuditEvent}s are committed domain facts, durable, the record
+ * of what happened. StatusEvents are operational outcomes — mostly failures and refusals — that are best-effort,
+ * transient, and exist so a human hears about a problem without reading log files. A single action may produce both.
  *
  * <p>
  * {@link #id} and {@link #ts} are stamped at PUBLICATION (see {@link StatusPublisher}), not at construction: publish
