@@ -19,7 +19,7 @@ package io.artifexlabs.inventory.api.events;
 
 /**
  * Fire-and-forget publication of {@link StatusEvent}s — the channel that carries operational trouble to a HUMAN instead
- * of to a log file (MORE_VERTX ask 3).
+ * of to a log file (PLAN.md Phase 21, ask 3).
  *
  * <p>
  * Implementations stamp {@link StatusEvent#id()} and {@link StatusEvent#ts()} at publication (so identity and time

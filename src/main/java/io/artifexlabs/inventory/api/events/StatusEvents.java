@@ -24,7 +24,7 @@ import java.util.Map;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Event-bus addressing and wire format for {@link StatusEvent} (MORE_VERTX). Everything PUBLISHES (fan-out) to
+ * Event-bus addressing and wire format for {@link StatusEvent} (PLAN.md Phase 21). Everything PUBLISHES (fan-out) to
  * {@link #ADDRESS}; a severity address exists so a consumer can subscribe to errors alone without filtering the
  * firehose. Payloads are additive-only — a breaking change bumps {@link #VERSION} and publishes both shapes for a
  * deprecation window, exactly as {@link InventoryEvents} does.

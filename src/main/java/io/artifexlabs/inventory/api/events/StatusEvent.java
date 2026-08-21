@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * An operational outcome a USER should learn about, carrying both faces of the same fact at once (MORE_VERTX): a
+ * An operational outcome a USER should learn about, carrying both faces of the same fact at once (PLAN.md Phase 21): a
  * machine-parsable {@link #code} plus {@link #subject} parameters, and a human-readable {@link #message} plus optional
  * {@link #detail}. One event, two audiences — because the builder demands both at the same call site, they cannot drift
  * apart the way a log line and a metric do.
