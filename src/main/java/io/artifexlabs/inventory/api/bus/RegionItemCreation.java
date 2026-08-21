@@ -20,9 +20,8 @@ package io.artifexlabs.inventory.api.bus;
 import io.vertx.core.json.JsonObject;
 
 /**
- * One-shot region-to-item creation ({@link BusActions#REGIONS_CREATE_ITEM}):
- * a box on an asset plus the item data it becomes, in one transaction.
- * {@link #containerId()} is nullable — null skips containment.
+ * One-shot region-to-item creation ({@link BusActions#REGIONS_CREATE_ITEM}): a box on an asset plus the item data it
+ * becomes, in one transaction. {@link #containerId()} is nullable — null skips containment.
  */
 public interface RegionItemCreation {
 

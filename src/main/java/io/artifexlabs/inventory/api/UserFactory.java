@@ -20,8 +20,7 @@ package io.artifexlabs.inventory.api;
 import io.vertx.core.json.JsonObject;
 
 /**
- * JSON wire format for {@link InventoryUser} objects. Never carries
- * credentials — those live in storage only.
+ * JSON wire format for {@link InventoryUser} objects. Never carries credentials — those live in storage only.
  *
  * @author mykel
  *

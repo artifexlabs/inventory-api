@@ -48,8 +48,8 @@ public class AuditEventFactoryTest {
 
   @Test
   public void testDetailsOptional() {
-    AuditEvent read = AuditEventFactory
-        .deserialize(AuditEventFactory.serialize(new DefaultAuditEvent("ae-2", TS, "system", "item.delete", "item-9", null)));
+    AuditEvent read = AuditEventFactory.deserialize(
+        AuditEventFactory.serialize(new DefaultAuditEvent("ae-2", TS, "system", "item.delete", "item-9", null)));
     assertTrue(read.getDetails().isEmpty());
   }
 

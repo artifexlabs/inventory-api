@@ -18,18 +18,14 @@
 /**
  * The request/reply contract of the Vert.x event-bus service fabric.
  *
- * Every unit of work crossing the bus travels as a {@link
- * io.artifexlabs.inventory.api.bus.BusEnvelope}: the action, its optional
- * target identifier, a typed payload, the acting user (id + principal), the
- * roles asserted for that user, and the shared fabric token. Workers (hosted
- * by inventory-server) verify the token, check the action's required role
- * ({@link io.artifexlabs.inventory.api.bus.BusActions}), do the work through
- * the domain services, and reply. External inputs are authenticated at the
- * HTTP tier (inventory-web-api) before an envelope is ever built; services
- * already on the bus are considered authenticated and speak for themselves.
+ * Every unit of work crossing the bus travels as a {@link io.artifexlabs.inventory.api.bus.BusEnvelope}: the action,
+ * its optional target identifier, a typed payload, the acting user (id + principal), the roles asserted for that user,
+ * and the shared fabric token. Workers (hosted by inventory-server) verify the token, check the action's required role
+ * ({@link io.artifexlabs.inventory.api.bus.BusActions}), do the work through the domain services, and reply. External
+ * inputs are authenticated at the HTTP tier (inventory-web-api) before an envelope is ever built; services already on
+ * the bus are considered authenticated and speak for themselves.
  *
- * This fabric is request/reply and distinct from {@code inventory.events.*}
- * (see {@link io.artifexlabs.inventory.api.events}), which stays a
- * publish-only stream of after-commit facts.
+ * This fabric is request/reply and distinct from {@code inventory.events.*} (see
+ * {@link io.artifexlabs.inventory.api.events}), which stays a publish-only stream of after-commit facts.
  */
 package io.artifexlabs.inventory.api.bus;

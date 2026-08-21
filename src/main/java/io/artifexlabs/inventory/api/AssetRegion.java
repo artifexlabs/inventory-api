@@ -25,11 +25,9 @@ import java.util.Optional;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A rectangular annotation drawn on a picture asset. Coordinates are
- * NORMALIZED to the image (0–1 for x/y/w/h) so they survive any display size.
- * A region may exist bare — drawn but not yet described — in which case
- * {@code itemId} is null; linking it to an {@link Item} happens when the box's
- * data is set (draw-then-describe).
+ * A rectangular annotation drawn on a picture asset. Coordinates are NORMALIZED to the image (0–1 for x/y/w/h) so they
+ * survive any display size. A region may exist bare — drawn but not yet described — in which case {@code itemId} is
+ * null; linking it to an {@link Item} happens when the box's data is set (draw-then-describe).
  *
  * @author mykel
  *
@@ -46,8 +44,7 @@ public record AssetRegion(String id, String assetId, double x, double y, double 
     // zero-BY-zero is a DOT — a point denoting an item without a box
     // (ongoing item 8); anything else needs both sides positive
     if ((w != 0 || h != 0) && (w <= 0 || h <= 0))
-      throw new IllegalArgumentException(
-          "width/height must both be positive, or both zero for a dot: " + w + "x" + h);
+      throw new IllegalArgumentException("width/height must both be positive, or both zero for a dot: " + w + "x" + h);
     if (x + w > 1.0000001 || y + h > 1.0000001)
       throw new IllegalArgumentException("region exceeds the image: " + x + "+" + w + "," + y + "+" + h);
   }
@@ -75,7 +72,6 @@ public record AssetRegion(String id, String assetId, double x, double y, double 
   public static AssetRegion fromJson(JsonObject j) {
     return j == null ? null
         : new AssetRegion(j.getString("id"), j.getString("assetId"), j.getDouble("x"), j.getDouble("y"),
-            j.getDouble("w"), j.getDouble("h"), j.getString("itemId"), j.getString("label"),
-            j.getInstant("timestamp"));
+            j.getDouble("w"), j.getDouble("h"), j.getString("itemId"), j.getString("label"), j.getInstant("timestamp"));
   }
 }

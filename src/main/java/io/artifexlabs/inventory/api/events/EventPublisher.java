@@ -23,16 +23,14 @@ import java.util.concurrent.CompletionStage;
 import io.artifexlabs.inventory.api.AuditEvent;
 
 /**
- * Fire-and-forget publication of domain facts (see VERTICLES.md). The event
- * IS the audit event — same id, same shape — so live consumers can dedupe
- * against replay from the {@code audit_events} table, which remains the
- * durable log of record. Publication must never couple to mutation success:
- * implementations never throw and never block, and callers publish only
- * AFTER their transaction has committed (announcing a change that might roll
- * back is worse than dropping a message a consumer will reconcile anyway).
+ * Fire-and-forget publication of domain facts (see VERTICLES.md). The event IS the audit event — same id, same shape —
+ * so live consumers can dedupe against replay from the {@code audit_events} table, which remains the durable log of
+ * record. Publication must never couple to mutation success: implementations never throw and never block, and callers
+ * publish only AFTER their transaction has committed (announcing a change that might roll back is worse than dropping a
+ * message a consumer will reconcile anyway).
  *
- * Consumers are idempotent and dedupe by event id; the {@code principal}
- * field is provenance, never a credential to re-authorize with.
+ * Consumers are idempotent and dedupe by event id; the {@code principal} field is provenance, never a credential to
+ * re-authorize with.
  */
 public interface EventPublisher {
 
@@ -44,10 +42,9 @@ public interface EventPublisher {
   };
 
   /**
-   * Publish {@code event} when {@code stage} completes successfully with an
-   * affirmative result: any value, except {@code false} and
-   * {@code Optional.empty()} (mutations that report "nothing happened" emit
-   * nothing). Returns a stage with the identical outcome.
+   * Publish {@code event} when {@code stage} completes successfully with an affirmative result: any value, except
+   * {@code false} and {@code Optional.empty()} (mutations that report "nothing happened" emit nothing). Returns a stage
+   * with the identical outcome.
    */
   default <T> CompletionStage<T> announce(CompletionStage<T> stage, AuditEvent event) {
     return stage.whenComplete((result, failure) -> {

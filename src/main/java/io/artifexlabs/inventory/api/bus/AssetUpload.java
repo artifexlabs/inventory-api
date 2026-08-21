@@ -18,10 +18,9 @@
 package io.artifexlabs.inventory.api.bus;
 
 /**
- * An asset attach ({@link BusActions#ASSETS_STORE}): the owning item's
- * identifier plus the bytes and their metadata. Bytes cross the bus base64
- * inside the envelope — bus messages are fully buffered, which is accepted
- * for the photo-sized assets this system stores.
+ * An asset attach ({@link BusActions#ASSETS_STORE}): the owning item's identifier plus the bytes and their metadata.
+ * Bytes cross the bus base64 inside the envelope — bus messages are fully buffered, which is accepted for the
+ * photo-sized assets this system stores.
  */
 public interface AssetUpload extends AssetContent {
 

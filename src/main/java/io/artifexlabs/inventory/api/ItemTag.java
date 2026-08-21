@@ -22,13 +22,12 @@ import java.util.Optional;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A metadata markup on an item: a key that may or may not carry a value.
- * {@code scuba} renders as "scuba"; {@code color=orange} renders as
- * "color=orange". Keys are unique per item (re-tagging the same key replaces
- * its value).
+ * A metadata markup on an item: a key that may or may not carry a value. {@code scuba} renders as "scuba";
+ * {@code color=orange} renders as "color=orange". Keys are unique per item (re-tagging the same key replaces its
+ * value).
  *
- * NOT to be confused with a printed <em>label</em> (the physical thing a
- * printer produces) or an NFC tag; this is data attached to the item.
+ * NOT to be confused with a printed <em>label</em> (the physical thing a printer produces) or an NFC tag; this is data
+ * attached to the item.
  */
 public record ItemTag(String key, String value) implements Comparable<ItemTag> {
 
@@ -59,8 +58,7 @@ public record ItemTag(String key, String value) implements Comparable<ItemTag> {
     if (rendered == null || rendered.isBlank())
       throw new IllegalArgumentException("cannot parse a blank tag");
     int eq = rendered.indexOf('=');
-    return eq < 0 ? new ItemTag(rendered, null)
-        : new ItemTag(rendered.substring(0, eq), rendered.substring(eq + 1));
+    return eq < 0 ? new ItemTag(rendered, null) : new ItemTag(rendered.substring(0, eq), rendered.substring(eq + 1));
   }
 
   public JsonObject toJson() {

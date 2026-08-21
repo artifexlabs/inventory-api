@@ -23,8 +23,8 @@ import java.util.Optional;
 import io.vertx.core.json.JsonObject;
 
 /**
- * One entry in the audit trail. Every change the system makes produces exactly one
- * of these, recorded in the same transaction as the change itself.
+ * One entry in the audit trail. Every change the system makes produces exactly one of these, recorded in the same
+ * transaction as the change itself.
  *
  * @author mykel
  *

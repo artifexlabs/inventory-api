@@ -20,8 +20,8 @@ package io.artifexlabs.inventory.api.bus;
 import io.vertx.core.json.JsonObject;
 
 /**
- * An admin-flag change ({@link BusActions#USERS_SET_ADMIN}): the identifier
- * of the user being changed plus the flag's new value.
+ * An admin-flag change ({@link BusActions#USERS_SET_ADMIN}): the identifier of the user being changed plus the flag's
+ * new value.
  */
 public interface AdminChange {
 

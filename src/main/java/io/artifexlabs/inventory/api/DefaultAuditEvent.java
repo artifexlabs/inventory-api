@@ -40,7 +40,8 @@ public final class DefaultAuditEvent implements AuditEvent {
   private final JsonObject details;
 
   public DefaultAuditEvent(String id, Instant timestamp, String principal, String action, String targetId,
-      JsonObject details) {
+      JsonObject details)
+  {
     this.id = requireNonNull(id, "id");
     this.timestamp = requireNonNull(timestamp, "timestamp");
     this.principal = requireNonNull(principal, "principal");

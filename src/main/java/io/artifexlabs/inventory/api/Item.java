@@ -33,6 +33,7 @@ import java.util.Set;
  * <li>A non-null name and possibly a display name (but probably not)</li>
  * <li>A timestamp that is the last-updated time</li>
  * </ul>
+ *
  * @author mykel
  *
  */
@@ -64,13 +65,14 @@ public interface Item {
   }
 
   /**
-   * The type of the object is the indicator of which subsystem will process any
-   * requests for it.  This is a simple string switch within event processing.
+   * The type of the object is the indicator of which subsystem will process any requests for it. This is a simple
+   * string switch within event processing.
    *
    * The default value for "Generic Object" is InventoryConstants.DEFAULT_TYPE ( "_" )
+   *
    * @return
    */
-   String getType() ;
+  String getType();
 
   /**
    * A free-form human description of this item.
@@ -82,11 +84,9 @@ public interface Item {
   }
 
   /**
-   * The single container this item sits inside, if any. Containment is a
-   * TREE since Phase 15: a physical thing is in exactly one place, so this
-   * replaces both the old {@code locationId} and the many-to-many
-   * containment join. An item with no container is a root — typically a
-   * building or a site.
+   * The single container this item sits inside, if any. Containment is a TREE since Phase 15: a physical thing is in
+   * exactly one place, so this replaces both the old {@code locationId} and the many-to-many containment join. An item
+   * with no container is a root — typically a building or a site.
    *
    * @return
    */
@@ -95,13 +95,11 @@ public interface Item {
   }
 
   /**
-   * This item's OWN coordinates, when it has been pinned. Most items are not
-   * pinned; they inherit from their container chain — resolve with
-   * {@code InventorySystem.effectiveCoordinates(id)} rather than reading this
-   * directly when you want "where is this thing".
+   * This item's OWN coordinates, when it has been pinned. Most items are not pinned; they inherit from their container
+   * chain — resolve with {@code InventorySystem.effectiveCoordinates(id)} rather than reading this directly when you
+   * want "where is this thing".
    *
-   * A "location" in the old sense is simply a container that carries
-   * coordinates.
+   * A "location" in the old sense is simply a container that carries coordinates.
    *
    * @return
    */
@@ -110,9 +108,8 @@ public interface Item {
   }
 
   /**
-   * Whether moving this item is a two-person job. A human judgment, NOT
-   * derived from {@link #getWeight()} — an awkward empty cabinet can be
-   * heavy while a dense small thing is not.
+   * Whether moving this item is a two-person job. A human judgment, NOT derived from {@link #getWeight()} — an awkward
+   * empty cabinet can be heavy while a dense small thing is not.
    *
    * @return
    */
@@ -121,8 +118,8 @@ public interface Item {
   }
 
   /**
-   * When this item expires, if it does. See {@link Expiration#absolute()} for
-   * the hard-stop vs recommendation distinction.
+   * When this item expires, if it does. See {@link Expiration#absolute()} for the hard-stop vs recommendation
+   * distinction.
    *
    * @return
    */
@@ -140,9 +137,8 @@ public interface Item {
   }
 
   /**
-   * Present only when this item is (or carries) data, describing the medium it
-   * lives on and how it may change. An Item is any physical thing; most items
-   * are not data and this is empty for them.
+   * Present only when this item is (or carries) data, describing the medium it lives on and how it may change. An Item
+   * is any physical thing; most items are not data and this is empty for them.
    *
    * @return
    */
@@ -169,8 +165,7 @@ public interface Item {
   }
 
   /**
-   * The size of this item as length x width x height, when known. Canonical
-   * unit is centimeters.
+   * The size of this item as length x width x height, when known. Canonical unit is centimeters.
    *
    * @return
    */
@@ -179,8 +174,8 @@ public interface Item {
   }
 
   /**
-   * Stocking targets (min/max on-hand) for this item, when management wants
-   * them tracked. Current on-hand is {@link #getQuantity()}.
+   * Stocking targets (min/max on-hand) for this item, when management wants them tracked. Current on-hand is
+   * {@link #getQuantity()}.
    *
    * @return
    */
@@ -190,8 +185,8 @@ public interface Item {
 
   /**
    *
-   * Optional collections are weird, but in this case it means something.  If this item has no
-   * contained items, it's not a container.
+   * Optional collections are weird, but in this case it means something. If this item has no contained items, it's not
+   * a container.
    *
    * @return
    */

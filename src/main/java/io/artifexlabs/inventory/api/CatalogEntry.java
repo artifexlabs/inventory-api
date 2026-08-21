@@ -20,12 +20,10 @@ package io.artifexlabs.inventory.api;
 import io.vertx.core.json.JsonObject;
 
 /**
- * What an external product catalog knows about a GTIN: prefill for a new
- * item, never authority over one (every field is user-editable before
- * create, and a catalog miss never blocks creation). {@code sourceUrl} is
- * the stable outside product page — it rides the created item as a
- * {@code source=} tag, which is also our ODbL attribution to the open-data
- * catalogs. Nullable fields are simply unknown.
+ * What an external product catalog knows about a GTIN: prefill for a new item, never authority over one (every field is
+ * user-editable before create, and a catalog miss never blocks creation). {@code sourceUrl} is the stable outside
+ * product page — it rides the created item as a {@code source=} tag, which is also our ODbL attribution to the
+ * open-data catalogs. Nullable fields are simply unknown.
  */
 public record CatalogEntry(String gtin, String name, String brand, String description, String category,
     Double weightGrams, String imageUrl, String sourceUrl, String source) {
@@ -52,8 +50,8 @@ public record CatalogEntry(String gtin, String name, String brand, String descri
   }
 
   public static CatalogEntry fromJson(JsonObject j) {
-    return new CatalogEntry(j.getString("gtin"), j.getString("name"), j.getString("brand"),
-        j.getString("description"), j.getString("category"), j.getDouble("weightGrams"), j.getString("imageUrl"),
-        j.getString("sourceUrl"), j.getString("source"));
+    return new CatalogEntry(j.getString("gtin"), j.getString("name"), j.getString("brand"), j.getString("description"),
+        j.getString("category"), j.getDouble("weightGrams"), j.getString("imageUrl"), j.getString("sourceUrl"),
+        j.getString("source"));
   }
 }

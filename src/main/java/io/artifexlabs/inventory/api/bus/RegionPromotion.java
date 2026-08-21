@@ -20,10 +20,8 @@ package io.artifexlabs.inventory.api.bus;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Promotion of an EXISTING bare box into an item
- * ({@link BusActions#REGIONS_MAKE_ITEM}): the region's identifier plus the
- * item data it becomes. {@link #containerId()} is nullable — null skips
- * containment.
+ * Promotion of an EXISTING bare box into an item ({@link BusActions#REGIONS_MAKE_ITEM}): the region's identifier plus
+ * the item data it becomes. {@link #containerId()} is nullable — null skips containment.
  */
 public interface RegionPromotion {
 

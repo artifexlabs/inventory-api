@@ -23,14 +23,12 @@ import java.util.regex.PatternSyntaxException;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A tag search: match a key, and optionally its value, by exact text, glob,
- * or regex. A null {@code valuePattern} means "any value, or none" — i.e.
- * existence of the key.
+ * A tag search: match a key, and optionally its value, by exact text, glob, or regex. A null {@code valuePattern} means
+ * "any value, or none" — i.e. existence of the key.
  *
- * Matching is compiled to a {@link Pattern} in every mode so implementations
- * share one semantic; EXACT quotes the input, GLOB translates {@code *} and
- * {@code ?} and quotes everything else. Case-insensitive throughout, since
- * humans type tags by hand.
+ * Matching is compiled to a {@link Pattern} in every mode so implementations share one semantic; EXACT quotes the
+ * input, GLOB translates {@code *} and {@code ?} and quotes everything else. Case-insensitive throughout, since humans
+ * type tags by hand.
  */
 public record TagQuery(String keyPattern, String valuePattern, Mode mode) {
 

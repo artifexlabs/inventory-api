@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Read access to the audit trail. The trail is append-only; readers never
- * mutate it.
+ * Read access to the audit trail. The trail is append-only; readers never mutate it.
  *
  * @author mykel
  *
@@ -36,18 +35,16 @@ public interface AuditReader {
   CompletionStage<List<AuditEvent>> byTarget(String targetId, int limit);
 
   /**
-   * An event with its commit-order cursor position. {@code seq} is assigned
-   * at insert, so it tracks commit order where the ULID {@code id} (assigned
-   * pre-commit) may not; consumers page by {@code seq} and re-scan a small
-   * overlap (VERTICLES.md).
+   * An event with its commit-order cursor position. {@code seq} is assigned at insert, so it tracks commit order where
+   * the ULID {@code id} (assigned pre-commit) may not; consumers page by {@code seq} and re-scan a small overlap
+   * (VERTICLES.md).
    */
   record SequencedEvent(long seq, AuditEvent event) {
   }
 
   /**
-   * Events with {@code seq > afterSeq}, oldest first, up to {@code limit} —
-   * the replay/catch-up feed for event consumers. Start from 0 for the full
-   * history.
+   * Events with {@code seq > afterSeq}, oldest first, up to {@code limit} — the replay/catch-up feed for event
+   * consumers. Start from 0 for the full history.
    */
   CompletionStage<List<SequencedEvent>> since(long afterSeq, int limit);
 }

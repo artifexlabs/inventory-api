@@ -20,9 +20,8 @@ package io.artifexlabs.inventory.api;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Receives audit trail entries. Implementations must persist the event before the
- * returned stage completes; when the sink participates in the mutation's
- * transaction, failure of the sink fails the mutation.
+ * Receives audit trail entries. Implementations must persist the event before the returned stage completes; when the
+ * sink participates in the mutation's transaction, failure of the sink fails the mutation.
  *
  * @author mykel
  *

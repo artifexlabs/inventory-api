@@ -24,13 +24,12 @@ import io.artifexlabs.inventory.api.LatLong;
 import io.vertx.core.json.JsonObject;
 
 /**
- * File content crossing the bus: the bytes and what they are. The parent of
- * {@link AssetUpload} (which adds the owning item) — replacement
- * ({@link BusActions#ASSETS_REPLACE}) needs only the content, because the
- * asset it replaces already knows its item.
+ * File content crossing the bus: the bytes and what they are. The parent of {@link AssetUpload} (which adds the owning
+ * item) — replacement ({@link BusActions#ASSETS_REPLACE}) needs only the content, because the asset it replaces already
+ * knows its item.
  *
- * Bytes ride base64 inside the envelope; bus messages are fully buffered,
- * accepted for the photo-and-document-sized assets this system stores.
+ * Bytes ride base64 inside the envelope; bus messages are fully buffered, accepted for the photo-and-document-sized
+ * assets this system stores.
  */
 public interface AssetContent {
 
@@ -44,9 +43,8 @@ public interface AssetContent {
   Optional<LatLong> coordinates();
 
   /**
-   * The asset kind ({@code photo}/{@code map}); null lets the store default.
-   * Replacement content leaves it null — a replace never changes an asset's
-   * kind.
+   * The asset kind ({@code photo}/{@code map}); null lets the store default. Replacement content leaves it null — a
+   * replace never changes an asset's kind.
    */
   default String kind() {
     return null;

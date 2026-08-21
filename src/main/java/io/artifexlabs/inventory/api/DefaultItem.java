@@ -33,8 +33,8 @@ import io.vertx.core.json.JsonObject;
  * The stock immutable {@link Item} implementation, and the type produced by
  * {@link ItemFactory#deserialize(JsonObject)}.
  *
- * Identity is the id alone, so that an Item within a containing Set remains the same Item
- * across updates to its other properties.
+ * Identity is the id alone, so that an Item within a containing Set remains the same Item across updates to its other
+ * properties.
  *
  * @author mykel
  *
@@ -80,15 +80,17 @@ public final class DefaultItem implements Item {
   }
 
   public DefaultItem(String id, String name, String displayName, String type, Instant timestamp,
-      Set<Item> containedItems) {
-    this(id, name, displayName, type, timestamp, null, null, null, false, null, null, null, null, null, null,
-        null, containedItems);
+      Set<Item> containedItems)
+  {
+    this(id, name, displayName, type, timestamp, null, null, null, false, null, null, null, null, null, null, null,
+        containedItems);
   }
 
   private DefaultItem(String id, String name, String displayName, String type, Instant timestamp, String description,
       String containerId, LatLong coordinates, boolean heavy, Expiration expiration, Set<ItemTag> tags,
       DataInfo dataInfo, Long quantity, Weight weight, Dimensions dimensions, ParValues parValues,
-      Set<Item> containedItems) {
+      Set<Item> containedItems)
+  {
     this.id = requireNonNull(id, "id");
     this.name = requireNonNull(name, "name");
     this.displayName = displayName;
@@ -102,8 +104,7 @@ public final class DefaultItem implements Item {
     this.heavy = heavy;
     this.expiration = expiration;
     // sorted + immutable: tag order must not depend on insertion accident
-    this.tags = tags == null || tags.isEmpty() ? Set.of()
-        : java.util.Collections.unmodifiableSet(new TreeSet<>(tags));
+    this.tags = tags == null || tags.isEmpty() ? Set.of() : java.util.Collections.unmodifiableSet(new TreeSet<>(tags));
     this.dataInfo = dataInfo;
     if (quantity != null && quantity < 0)
       throw new IllegalArgumentException("quantity must be non-negative: " + quantity);
@@ -121,10 +122,9 @@ public final class DefaultItem implements Item {
    */
   public DefaultItem(JsonObject j) {
     this(j.getString("id"), j.getString("name"), j.getString("displayName"), j.getString("type"),
-        j.getInstant("timestamp"), j.getString("description"), j.getString("containerId"),
-        coordinatesFrom(j), Boolean.TRUE.equals(j.getBoolean("heavy")),
-        Expiration.fromJson(j.getJsonObject("expiration")), tagsFrom(j.getJsonArray("tags")),
-        DataInfo.fromJson(j.getJsonObject("dataInfo")), j.getLong("quantity"),
+        j.getInstant("timestamp"), j.getString("description"), j.getString("containerId"), coordinatesFrom(j),
+        Boolean.TRUE.equals(j.getBoolean("heavy")), Expiration.fromJson(j.getJsonObject("expiration")),
+        tagsFrom(j.getJsonArray("tags")), DataInfo.fromJson(j.getJsonObject("dataInfo")), j.getLong("quantity"),
         j.getDouble("weightGrams") == null ? null : new Weight(j.getDouble("weightGrams")),
         Dimensions.fromJson(j.getJsonObject("dimensionsCm")), ParValues.fromJson(j.getJsonObject("parValues")),
         containedItemsFrom(j.getJsonArray("containedItems")));
@@ -358,8 +358,8 @@ public final class DefaultItem implements Item {
     }
 
     public DefaultItem build() {
-      return new DefaultItem(id, name, displayName, type, timestamp, description, containerId, coordinates,
-          heavy, expiration, tags, dataInfo, quantity, weight, dimensions, parValues, containedItems);
+      return new DefaultItem(id, name, displayName, type, timestamp, description, containerId, coordinates, heavy,
+          expiration, tags, dataInfo, quantity, weight, dimensions, parValues, containedItems);
     }
   }
 }

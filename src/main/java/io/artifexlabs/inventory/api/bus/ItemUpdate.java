@@ -22,9 +22,8 @@ import io.artifexlabs.inventory.api.Item;
 import io.vertx.core.json.JsonObject;
 
 /**
- * An item update: the identifier of the item being updated together with its
- * full replacement state ({@link BusActions#ITEMS_UPDATE}). The id is carried
- * separately from the state so the worker can verify they agree.
+ * An item update: the identifier of the item being updated together with its full replacement state
+ * ({@link BusActions#ITEMS_UPDATE}). The id is carried separately from the state so the worker can verify they agree.
  */
 public interface ItemUpdate {
 

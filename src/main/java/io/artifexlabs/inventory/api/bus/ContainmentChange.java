@@ -20,10 +20,9 @@ package io.artifexlabs.inventory.api.bus;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A containment relationship change: which item enters or leaves which
- * container ({@link BusActions#ITEMS_CONTAIN}/{@link BusActions#ITEMS_UNCONTAIN}),
- * or which container an item moves to ({@link BusActions#ITEMS_MOVE}, where
- * {@link #containerId()} is the move target).
+ * A containment relationship change: which item enters or leaves which container
+ * ({@link BusActions#ITEMS_CONTAIN}/{@link BusActions#ITEMS_UNCONTAIN}), or which container an item moves to
+ * ({@link BusActions#ITEMS_MOVE}, where {@link #containerId()} is the move target).
  */
 public interface ContainmentChange {
 

@@ -23,16 +23,13 @@ import java.util.Set;
 import io.vertx.core.json.JsonObject;
 
 /**
- * The parent of every request that crosses the service bus: it identifies the
- * work (action + optional target id), carries the payload, and binds the
- * request to the authenticated user it acts for.
+ * The parent of every request that crosses the service bus: it identifies the work (action + optional target id),
+ * carries the payload, and binds the request to the authenticated user it acts for.
  *
- * External inputs (browser, mobile) are authenticated at the HTTP tier; a
- * service already on the bus is considered authenticated. Either way the
- * envelope must name the acting user ({@link #userId()}/{@link #principal()})
- * so every action is attributable, must assert the user's {@link #roles()}
- * (the worker refuses actions whose required role is missing), and must
- * present the shared fabric {@link #token()} before any worker will touch it.
+ * External inputs (browser, mobile) are authenticated at the HTTP tier; a service already on the bus is considered
+ * authenticated. Either way the envelope must name the acting user ({@link #userId()}/{@link #principal()}) so every
+ * action is attributable, must assert the user's {@link #roles()} (the worker refuses actions whose required role is
+ * missing), and must present the shared fabric {@link #token()} before any worker will touch it.
  */
 public interface BusEnvelope {
 

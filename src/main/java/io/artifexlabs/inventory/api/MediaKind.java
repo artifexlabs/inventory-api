@@ -18,8 +18,8 @@
 package io.artifexlabs.inventory.api;
 
 /**
- * What kind of thing an {@link Item} is. Most inventory is plain physical
- * objects; the remaining kinds describe the medium data lives on.
+ * What kind of thing an {@link Item} is. Most inventory is plain physical objects; the remaining kinds describe the
+ * medium data lives on.
  *
  * @author mykel
  *

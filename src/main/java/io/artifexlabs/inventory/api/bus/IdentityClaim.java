@@ -20,9 +20,8 @@ package io.artifexlabs.inventory.api.bus;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A provider-verified OIDC identity presented for exchange
- * ({@link BusActions#AUTH_EXCHANGE}). {@link #provider()}/{@link #subject()}
- * are nullable together: legacy email-only claims key on the email instead.
+ * A provider-verified OIDC identity presented for exchange ({@link BusActions#AUTH_EXCHANGE}).
+ * {@link #provider()}/{@link #subject()} are nullable together: legacy email-only claims key on the email instead.
  */
 public interface IdentityClaim {
 

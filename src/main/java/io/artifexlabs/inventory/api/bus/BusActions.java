@@ -21,14 +21,12 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * The complete vocabulary of work the bus carries, each action bound to the
- * service address that answers it and the {@link Roles role} it demands.
- * Requests are {@code request/reply} (point-to-point) — distinct from the
- * after-commit fact events of {@code inventory.events.*}, which remain
- * publish-only announcements.
+ * The complete vocabulary of work the bus carries, each action bound to the service address that answers it and the
+ * {@link Roles role} it demands. Requests are {@code request/reply} (point-to-point) — distinct from the after-commit
+ * fact events of {@code inventory.events.*}, which remain publish-only announcements.
  *
- * Failure replies use HTTP-aligned failure codes (400, 401, 403, 404, 409,
- * 503) so the HTTP gateway maps them one-to-one.
+ * Failure replies use HTTP-aligned failure codes (400, 401, 403, 404, 409, 503) so the HTTP gateway maps them
+ * one-to-one.
  */
 public final class BusActions {
 
@@ -107,8 +105,8 @@ public final class BusActions {
   public final static String AUTH_EXCHANGE = "auth.exchange";
 
   /**
-   * action → required role. Auth actions map to no role: they run before a
-   * user exists and are gated by the fabric token alone.
+   * action → required role. Auth actions map to no role: they run before a user exists and are gated by the fabric
+   * token alone.
    */
   private final static Map<String, Optional<String>> REQUIRED_ROLE = Map.ofEntries(
       Map.entry(ITEMS_LIST, Optional.of(Roles.READ)), Map.entry(ITEMS_LIST_OF_TYPE, Optional.of(Roles.READ)),
@@ -121,20 +119,16 @@ public final class BusActions {
       Map.entry(ITEMS_IDENTITY_ADD, Optional.of(Roles.WRITE)),
       Map.entry(ITEMS_IDENTITY_REMOVE, Optional.of(Roles.WRITE)),
       Map.entry(ITEMS_FIND_BY_IDENTITY, Optional.of(Roles.READ)),
-      Map.entry(ITEMS_IDENTITIES_OF, Optional.of(Roles.READ)),
-      Map.entry(ASSETS_REPLACE, Optional.of(Roles.WRITE)),
-      Map.entry(ASSETS_CREATE_ITEM, Optional.of(Roles.WRITE)),
-      Map.entry(ASSETS_STORE, Optional.of(Roles.WRITE)), Map.entry(ASSETS_GET, Optional.of(Roles.READ)),
-      Map.entry(ASSETS_LIST_FOR, Optional.of(Roles.READ)), Map.entry(ASSETS_DELETE, Optional.of(Roles.WRITE)),
-      Map.entry(REGIONS_LIST, Optional.of(Roles.READ)), Map.entry(REGIONS_CREATE, Optional.of(Roles.WRITE)),
-      Map.entry(REGIONS_DELETE, Optional.of(Roles.WRITE)), Map.entry(REGIONS_CREATE_ITEM, Optional.of(Roles.WRITE)),
-      Map.entry(REGIONS_MAKE_ITEM, Optional.of(Roles.WRITE)),
-      Map.entry(CATALOG_UPC, Optional.of(Roles.READ)),
-      Map.entry(CATALOG_CREATE_ITEM, Optional.of(Roles.WRITE)),
+      Map.entry(ITEMS_IDENTITIES_OF, Optional.of(Roles.READ)), Map.entry(ASSETS_REPLACE, Optional.of(Roles.WRITE)),
+      Map.entry(ASSETS_CREATE_ITEM, Optional.of(Roles.WRITE)), Map.entry(ASSETS_STORE, Optional.of(Roles.WRITE)),
+      Map.entry(ASSETS_GET, Optional.of(Roles.READ)), Map.entry(ASSETS_LIST_FOR, Optional.of(Roles.READ)),
+      Map.entry(ASSETS_DELETE, Optional.of(Roles.WRITE)), Map.entry(REGIONS_LIST, Optional.of(Roles.READ)),
+      Map.entry(REGIONS_CREATE, Optional.of(Roles.WRITE)), Map.entry(REGIONS_DELETE, Optional.of(Roles.WRITE)),
+      Map.entry(REGIONS_CREATE_ITEM, Optional.of(Roles.WRITE)), Map.entry(REGIONS_MAKE_ITEM, Optional.of(Roles.WRITE)),
+      Map.entry(CATALOG_UPC, Optional.of(Roles.READ)), Map.entry(CATALOG_CREATE_ITEM, Optional.of(Roles.WRITE)),
       Map.entry(AUDIT_RECENT, Optional.of(Roles.ADMIN)), Map.entry(AUDIT_BY_TARGET, Optional.of(Roles.READ)),
       Map.entry(LABELS_QR, Optional.of(Roles.READ)), Map.entry(LABELS_PRINT, Optional.of(Roles.WRITE)),
-      Map.entry(LABELS_FEED, Optional.of(Roles.WRITE)),
-      Map.entry(LABELS_PRINT_BATCH, Optional.of(Roles.WRITE)),
+      Map.entry(LABELS_FEED, Optional.of(Roles.WRITE)), Map.entry(LABELS_PRINT_BATCH, Optional.of(Roles.WRITE)),
       Map.entry(USERS_LIST, Optional.of(Roles.ADMIN)), Map.entry(USERS_CREATE, Optional.of(Roles.ADMIN)),
       Map.entry(USERS_DELETE, Optional.of(Roles.ADMIN)), Map.entry(USERS_SET_ADMIN, Optional.of(Roles.ADMIN)),
       Map.entry(TOKENS_FOR_USER, Optional.of(Roles.ADMIN)), Map.entry(TOKENS_REVOKE, Optional.of(Roles.ADMIN)),
@@ -150,8 +144,8 @@ public final class BusActions {
   }
 
   /**
-   * The role the action demands; empty for the pre-auth {@code auth.*}
-   * actions. Unknown actions throw — validate with {@link #known} first.
+   * The role the action demands; empty for the pre-auth {@code auth.*} actions. Unknown actions throw — validate with
+   * {@link #known} first.
    */
   public final static Optional<String> requiredRole(String action) {
     Optional<String> role = REQUIRED_ROLE.get(action);
@@ -161,8 +155,8 @@ public final class BusActions {
   }
 
   /**
-   * The service address answering an action: {@code inventory.svc.<prefix>}
-   * where prefix is the action's segment before the first dot ({@code
+   * The service address answering an action: {@code inventory.svc.<prefix>} where prefix is the action's segment before
+   * the first dot ({@code
    * items.create} → {@code inventory.svc.items}).
    */
   public final static String addressOf(String action) {

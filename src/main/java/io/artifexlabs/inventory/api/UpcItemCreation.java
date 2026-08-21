@@ -20,12 +20,10 @@ package io.artifexlabs.inventory.api;
 import java.util.List;
 
 /**
- * Everything the one-shot create-from-UPC needs, already merged: request
- * fields have won over catalog prefill by the time this is built (the worker
- * does the merging), tags carry the catalog metadata ({@code brand=},
- * {@code category=}, {@code source=}), and {@code gtin13} is the canonical
- * identity the new item claims. {@code name} and {@code type} are required;
- * the rest may be null/empty.
+ * Everything the one-shot create-from-UPC needs, already merged: request fields have won over catalog prefill by the
+ * time this is built (the worker does the merging), tags carry the catalog metadata ({@code brand=}, {@code category=},
+ * {@code source=}), and {@code gtin13} is the canonical identity the new item claims. {@code name} and {@code type} are
+ * required; the rest may be null/empty.
  */
 public record UpcItemCreation(String gtin13, String name, String displayName, String type, String description,
     Double weightGrams, String containerId, List<ItemTag> tags) {

@@ -22,9 +22,8 @@ import java.util.Set;
 import io.artifexlabs.inventory.api.InventoryUser;
 
 /**
- * The role vocabulary for bus actions. Every action is assigned exactly one
- * required role in {@link BusActions}; an envelope whose asserted roles do not
- * include it is refused with 403 before any work happens.
+ * The role vocabulary for bus actions. Every action is assigned exactly one required role in {@link BusActions}; an
+ * envelope whose asserted roles do not include it is refused with 403 before any work happens.
  */
 public final class Roles {
 
@@ -41,8 +40,8 @@ public final class Roles {
   }
 
   /**
-   * The roles an authenticated user holds. Every user reads and writes;
-   * admins administer. This is the single place the user→role mapping lives.
+   * The roles an authenticated user holds. Every user reads and writes; admins administer. This is the single place the
+   * user→role mapping lives.
    */
   public final static Set<String> rolesFor(InventoryUser user) {
     return user.isAdmin() ? Set.of(READ, WRITE, ADMIN) : Set.of(READ, WRITE);

@@ -20,8 +20,8 @@ package io.artifexlabs.inventory.api.bus;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A bare box drawn on a picture asset ({@link BusActions#REGIONS_CREATE}):
- * the asset it belongs to plus normalized coordinates and an optional label.
+ * A bare box drawn on a picture asset ({@link BusActions#REGIONS_CREATE}): the asset it belongs to plus normalized
+ * coordinates and an optional label.
  */
 public interface RegionBox {
 

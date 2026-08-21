@@ -22,11 +22,9 @@ import static java.util.Objects.requireNonNull;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Describes what kind of thing an {@link Item} is. A plain physical object is
- * {@link #OBJECT} (equivalently, an Item with no DataInfo at all). For data
- * items it records the medium, whether the data can change (a disk) or not (a
- * write-once CD), and whether it is an archive acting as a sub-container for
- * data on the same medium.
+ * Describes what kind of thing an {@link Item} is. A plain physical object is {@link #OBJECT} (equivalently, an Item
+ * with no DataInfo at all). For data items it records the medium, whether the data can change (a disk) or not (a
+ * write-once CD), and whether it is an archive acting as a sub-container for data on the same medium.
  *
  * @author mykel
  *

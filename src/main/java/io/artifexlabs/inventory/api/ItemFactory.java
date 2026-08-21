@@ -53,8 +53,8 @@ public class ItemFactory {
     i.getWeight().ifPresent(w -> j.put("weightGrams", w.grams()));
     i.getDimensions().ifPresent(d -> j.put("dimensionsCm", d.toJson()));
     i.getParValues().ifPresent(p -> j.put("parValues", p.toJson()));
-    i.getContainedItems()
-        .ifPresent(items -> j.put("containedItems", new JsonArray(items.stream().map(ItemFactory::serialize).toList())));
+    i.getContainedItems().ifPresent(
+        items -> j.put("containedItems", new JsonArray(items.stream().map(ItemFactory::serialize).toList())));
     return j;
   }
 }

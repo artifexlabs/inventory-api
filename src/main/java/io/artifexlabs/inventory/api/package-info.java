@@ -16,7 +16,7 @@
  * @formatter:on
  */
 /**
- * Domain contracts for the inventory system. Framework-light: JSON wire format via
- * Vert.x {@code JsonObject} only; service interfaces return {@code CompletionStage}.
+ * Domain contracts for the inventory system. Framework-light: JSON wire format via Vert.x {@code JsonObject} only;
+ * service interfaces return {@code CompletionStage}.
  */
 package io.artifexlabs.inventory.api;

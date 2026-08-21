@@ -52,8 +52,7 @@ public class ItemFactoryTest {
 
   @Test
   public void testRoundTripOfContainer() {
-    Item original = new DefaultItem("box", "a box", "The Box", "container", TS,
-        Set.of(leaf("A"), leaf("B")));
+    Item original = new DefaultItem("box", "a box", "The Box", "container", TS, Set.of(leaf("A"), leaf("B")));
     Item read = ItemFactory.deserialize(ItemFactory.serialize(original));
 
     assertTrue(read.isContainer());
@@ -128,8 +127,8 @@ public class ItemFactoryTest {
   public void testBuilderCopiesAllFields() {
     Item original = DefaultItem.builder().id("D").name("cdrom").type("data").timestamp(TS).displayName("CD-ROM")
         .description("write-once").dataInfo(new DataInfo(MediaKind.PHYSICAL_MEDIA, false, true)).quantity(3L)
-        .weight(new Weight(15.5)).dimensions(Dimensions.ofInches(4.724, 4.724, 0.047))
-        .containedItems(Set.of(leaf("A"))).build();
+        .weight(new Weight(15.5)).dimensions(Dimensions.ofInches(4.724, 4.724, 0.047)).containedItems(Set.of(leaf("A")))
+        .build();
     Item copy = DefaultItem.builder(original).build();
     assertEquals(ItemFactory.serialize(original), ItemFactory.serialize(copy));
   }

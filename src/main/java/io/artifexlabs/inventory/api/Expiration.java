@@ -24,11 +24,9 @@ import io.vertx.core.json.JsonObject;
 /**
  * When an item expires, and how seriously to take it.
  *
- * {@code absolute} distinguishes a hard stop — a pharmaceutical's expiry, a
- * certification lapse, a fire extinguisher's service date — from a
- * recommendation like a "best by" date. The flag exists because the two
- * demand different human responses, and only a person can say which one a
- * date is.
+ * {@code absolute} distinguishes a hard stop — a pharmaceutical's expiry, a certification lapse, a fire extinguisher's
+ * service date — from a recommendation like a "best by" date. The flag exists because the two demand different human
+ * responses, and only a person can say which one a date is.
  */
 public record Expiration(Instant when, boolean absolute) {
 

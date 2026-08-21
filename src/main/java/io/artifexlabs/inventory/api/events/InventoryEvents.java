@@ -23,13 +23,11 @@ import io.artifexlabs.inventory.api.AuditEventFactory;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Event-bus addressing and wire format. Everything publishes (fan-out) to
- * {@link #ADDRESS} and to the per-category address ({@code
- * inventory.events.<category>}, category = the action's prefix: item,
- * location, asset, region, user, token, label) so consumers pick their
- * granularity. Payloads are the serialized audit event plus a version field;
- * additive changes only — a breaking change bumps {@code VERSION} and
- * publishes both shapes for a deprecation window.
+ * Event-bus addressing and wire format. Everything publishes (fan-out) to {@link #ADDRESS} and to the per-category
+ * address ({@code
+ * inventory.events.<category>}, category = the action's prefix: item, location, asset, region, user, token, label) so
+ * consumers pick their granularity. Payloads are the serialized audit event plus a version field; additive changes only
+ * — a breaking change bumps {@code VERSION} and publishes both shapes for a deprecation window.
  */
 public final class InventoryEvents {
 

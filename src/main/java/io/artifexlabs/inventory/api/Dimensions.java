@@ -20,8 +20,8 @@ package io.artifexlabs.inventory.api;
 import io.vertx.core.json.JsonObject;
 
 /**
- * The physical size of an item as length x width x height. Canonically stored in
- * centimeters; conversions are derived, never stored.
+ * The physical size of an item as length x width x height. Canonically stored in centimeters; conversions are derived,
+ * never stored.
  *
  * @author mykel
  *

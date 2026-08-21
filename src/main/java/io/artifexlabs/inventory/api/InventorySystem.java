@@ -22,17 +22,15 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Primary inventory service contract. Implementations must make every mutation
- * transactionally complete and record an audit trail entry for it.
+ * Primary inventory service contract. Implementations must make every mutation transactionally complete and record an
+ * audit trail entry for it.
  */
 public interface InventorySystem {
 
   /**
-   * A view of this system whose audit entries attribute mutations to the
-   * given acting principal — how a per-request actor (a bus envelope's
-   * authenticated user) flows into the audit trail. Views share state with
-   * their parent; the default returns {@code this} (service-level
-   * attribution).
+   * A view of this system whose audit entries attribute mutations to the given acting principal — how a per-request
+   * actor (a bus envelope's authenticated user) flows into the audit trail. Views share state with their parent; the
+   * default returns {@code this} (service-level attribution).
    */
   default InventorySystem actingAs(String principal) {
     return this;
@@ -56,9 +54,8 @@ public interface InventorySystem {
   CompletionStage<Boolean> deleteItem(String id);
 
   /**
-   * The single container this item sits in — the reverse of
-   * {@link Item#getContainedItems()}. Empty when the item is a root (or does
-   * not exist).
+   * The single container this item sits in — the reverse of {@link Item#getContainedItems()}. Empty when the item is a
+   * root (or does not exist).
    *
    * Containment is a TREE since Phase 15; this replaced {@code
    * getContainersOf}, which could return several.
@@ -69,11 +66,9 @@ public interface InventorySystem {
   CompletionStage<Optional<Item>> getContainer(String itemId);
 
   /**
-   * Put an item into a container, RE-PARENTING it if it was already
-   * somewhere else — a thing is in exactly one place, so this is a move, not
-   * an addition. False when either id is unknown, they are equal, or the
-   * move would create a cycle (a container cannot be placed inside its own
-   * descendant).
+   * Put an item into a container, RE-PARENTING it if it was already somewhere else — a thing is in exactly one place,
+   * so this is a move, not an addition. False when either id is unknown, they are equal, or the move would create a
+   * cycle (a container cannot be placed inside its own descendant).
    *
    * @param containerId
    * @param itemId
@@ -82,8 +77,7 @@ public interface InventorySystem {
   CompletionStage<Boolean> addToContainer(String containerId, String itemId);
 
   /**
-   * Take an item out of its container, making it a root; false if it was not
-   * in that container.
+   * Take an item out of its container, making it a root; false if it was not in that container.
    *
    * @param containerId
    * @param itemId
@@ -92,9 +86,8 @@ public interface InventorySystem {
   CompletionStage<Boolean> removeFromContainer(String containerId, String itemId);
 
   /**
-   * Move an item to a container. Identical in effect to
-   * {@link #addToContainer} now that containment is single-parent; retained
-   * because it reads better at call sites that mean "relocate".
+   * Move an item to a container. Identical in effect to {@link #addToContainer} now that containment is single-parent;
+   * retained because it reads better at call sites that mean "relocate".
    *
    * @param itemId
    * @param targetContainerId
@@ -103,9 +96,8 @@ public interface InventorySystem {
   CompletionStage<Boolean> moveToContainer(String itemId, String targetContainerId);
 
   /**
-   * Where this item actually is: its own coordinates when pinned, otherwise
-   * the nearest ancestor container's, walking up the containment chain.
-   * Empty when nothing in the chain is pinned.
+   * Where this item actually is: its own coordinates when pinned, otherwise the nearest ancestor container's, walking
+   * up the containment chain. Empty when nothing in the chain is pinned.
    *
    * @param itemId
    * @return
@@ -113,8 +105,7 @@ public interface InventorySystem {
   CompletionStage<Optional<LatLong>> effectiveCoordinates(String itemId);
 
   /**
-   * Attach a tag, replacing any existing tag with the same key. False if the
-   * item is unknown.
+   * Attach a tag, replacing any existing tag with the same key. False if the item is unknown.
    *
    * @param itemId
    * @param tag
@@ -140,12 +131,10 @@ public interface InventorySystem {
   CompletionStage<List<Item>> findByTag(TagQuery query);
 
   /**
-   * Claim a physical-marker identity for an item. Idempotent when the item
-   * already holds this exact identity; false when the item is unknown. When
-   * the identity already claims a DIFFERENT item, the stage completes
-   * exceptionally with {@link IllegalStateException} — a marker reused on a
-   * second item is a mistake to surface, never a silent re-point (remove it
-   * from the first item explicitly to migrate a marker).
+   * Claim a physical-marker identity for an item. Idempotent when the item already holds this exact identity; false
+   * when the item is unknown. When the identity already claims a DIFFERENT item, the stage completes exceptionally with
+   * {@link IllegalStateException} — a marker reused on a second item is a mistake to surface, never a silent re-point
+   * (remove it from the first item explicitly to migrate a marker).
    *
    * @param itemId
    * @param identity
@@ -154,8 +143,7 @@ public interface InventorySystem {
   CompletionStage<Boolean> addIdentity(String itemId, ItemIdentity identity);
 
   /**
-   * Release an identity from an item; false when the item is unknown or the
-   * identity is not among that item's markers.
+   * Release an identity from an item; false when the item is unknown or the identity is not among that item's markers.
    *
    * @param itemId
    * @param identity

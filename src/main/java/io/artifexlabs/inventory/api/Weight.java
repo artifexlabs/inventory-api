@@ -18,8 +18,8 @@
 package io.artifexlabs.inventory.api;
 
 /**
- * The weight of a physical item. Canonically stored in grams; conversions are
- * derived, never stored, so the canonical value is the single source of truth.
+ * The weight of a physical item. Canonically stored in grams; conversions are derived, never stored, so the canonical
+ * value is the single source of truth.
  *
  * @author mykel
  *

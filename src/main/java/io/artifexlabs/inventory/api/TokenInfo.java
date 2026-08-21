@@ -38,8 +38,7 @@ public record TokenInfo(String token, String userId, Instant issuedAt, boolean r
   }
 
   public JsonObject toJson() {
-    return new JsonObject().put("token", token).put("userId", userId).put("issuedAt", issuedAt).put("revoked",
-        revoked);
+    return new JsonObject().put("token", token).put("userId", userId).put("issuedAt", issuedAt).put("revoked", revoked);
   }
 
   public static TokenInfo fromJson(JsonObject j) {

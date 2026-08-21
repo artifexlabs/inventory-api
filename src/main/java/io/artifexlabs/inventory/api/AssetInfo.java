@@ -24,26 +24,19 @@ import java.time.Instant;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Metadata for an asset attached to an {@link Item} — a picture, an audio
- * recording, a PDF, an archive: any content type. The bytes themselves travel
- * separately.
+ * Metadata for an asset attached to an {@link Item} — a picture, an audio recording, a PDF, an archive: any content
+ * type. The bytes themselves travel separately.
  *
- * {@code attachedAt} is fixed when the asset is first attached and never
- * moves; {@code updatedAt} starts equal to it and advances each time the
- * asset is replaced. The superseded bytes are archived into the
- * {@code asset.replace} audit event, so history is recoverable without a
- * versions table.
+ * {@code attachedAt} is fixed when the asset is first attached and never moves; {@code updatedAt} starts equal to it
+ * and advances each time the asset is replaced. The superseded bytes are archived into the {@code asset.replace} audit
+ * event, so history is recoverable without a versions table.
  *
- * {@code coordinates} is where a picture was taken when known — from an
- * explicit client value (a phone's GPS at capture) or, failing that, EXIF —
- * and null otherwise; tiers above use it to SUGGEST a container, never to
- * set one.
+ * {@code coordinates} is where a picture was taken when known — from an explicit client value (a phone's GPS at
+ * capture) or, failing that, EXIF — and null otherwise; tiers above use it to SUGGEST a container, never to set one.
  *
- * {@code kind} distinguishes how an image asset is USED, not what it is:
- * {@link #KIND_PHOTO} (default) is a picture of a space or thing whose
- * annotator boxes become items; {@link #KIND_MAP} is a floor plan or overview
- * whose boxes mark out named places (items of type=location). Free-form by
- * design, like {@code Item.type}.
+ * {@code kind} distinguishes how an image asset is USED, not what it is: {@link #KIND_PHOTO} (default) is a picture of
+ * a space or thing whose annotator boxes become items; {@link #KIND_MAP} is a floor plan or overview whose boxes mark
+ * out named places (items of type=location). Free-form by design, like {@code Item.type}.
  *
  * @author mykel
  *
@@ -72,14 +65,14 @@ public record AssetInfo(String id, String itemId, String filename, String conten
   }
 
   /** A freshly attached asset: updatedAt tracks attachedAt; default kind. */
-  public AssetInfo(String id, String itemId, String filename, String contentType, long sizeBytes,
-      Instant attachedAt, LatLong coordinates) {
+  public AssetInfo(String id, String itemId, String filename, String contentType, long sizeBytes, Instant attachedAt,
+      LatLong coordinates)
+  {
     this(id, itemId, filename, contentType, sizeBytes, attachedAt, attachedAt, coordinates, null);
   }
 
   /** A freshly attached asset with no capture coordinates; default kind. */
-  public AssetInfo(String id, String itemId, String filename, String contentType, long sizeBytes,
-      Instant attachedAt) {
+  public AssetInfo(String id, String itemId, String filename, String contentType, long sizeBytes, Instant attachedAt) {
     this(id, itemId, filename, contentType, sizeBytes, attachedAt, attachedAt, null, null);
   }
 
@@ -113,9 +106,8 @@ public record AssetInfo(String id, String itemId, String filename, String conten
       return null;
     Double lat = j.getDouble("latitude");
     Double lng = j.getDouble("longitude");
-    return new AssetInfo(j.getString("id"), j.getString("itemId"), j.getString("filename"),
-        j.getString("contentType"), j.getLong("sizeBytes"), j.getInstant("attachedAt"),
-        j.getInstant("updatedAt"), lat != null && lng != null ? new LatLong(lat, lng) : null,
-        j.getString("kind"));
+    return new AssetInfo(j.getString("id"), j.getString("itemId"), j.getString("filename"), j.getString("contentType"),
+        j.getLong("sizeBytes"), j.getInstant("attachedAt"), j.getInstant("updatedAt"),
+        lat != null && lng != null ? new LatLong(lat, lng) : null, j.getString("kind"));
   }
 }

@@ -49,10 +49,10 @@ public class Phase3TypesTest {
     assertEquals(new ParValues(5, 50), read.getParValues().get());
     assertTrue(read.getParValues().get().isBelowMin(read.getQuantity().get()));
     // absent by default, and builder-copy preserves it
-    assertTrue(ItemFactory.deserialize(ItemFactory.serialize(
-        DefaultItem.builder().id("Q").name("q").timestamp(TS).build())).getParValues().isEmpty());
-    assertEquals(ItemFactory.serialize(original),
-        ItemFactory.serialize(DefaultItem.builder(original).build()));
+    assertTrue(
+        ItemFactory.deserialize(ItemFactory.serialize(DefaultItem.builder().id("Q").name("q").timestamp(TS).build()))
+            .getParValues().isEmpty());
+    assertEquals(ItemFactory.serialize(original), ItemFactory.serialize(DefaultItem.builder(original).build()));
   }
 
   @Test
@@ -61,7 +61,6 @@ public class Phase3TypesTest {
     assertEquals(a, AssetInfo.fromJson(a.toJson()));
     assertNull(AssetInfo.fromJson(null));
     assertThrows(NullPointerException.class, () -> new AssetInfo("as-1", "item-1", null, "image/jpeg", 1, TS));
-    assertThrows(IllegalArgumentException.class,
-        () -> new AssetInfo("as-1", "item-1", "f", "image/jpeg", -1, TS));
+    assertThrows(IllegalArgumentException.class, () -> new AssetInfo("as-1", "item-1", "f", "image/jpeg", -1, TS));
   }
 }

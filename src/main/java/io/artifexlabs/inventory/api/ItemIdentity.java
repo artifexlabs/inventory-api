@@ -20,16 +20,13 @@ package io.artifexlabs.inventory.api;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A physical marker resolving to exactly one item: an NFC tag's factory UID,
- * a product's UPC, a foreign QR payload — one {@code (kind, value)} mapping
- * for every marker type rather than a bespoke column per type, the same shape
- * as the {@code user_identities(provider, subject)} table. Kinds are
- * free-form lowercase slugs by convention ({@code nfc-uid}, {@code upc},
- * {@code qr}); a given {@code (kind, value)} pair claims at most one item.
+ * A physical marker resolving to exactly one item: an NFC tag's factory UID, a product's UPC, a foreign QR payload —
+ * one {@code (kind, value)} mapping for every marker type rather than a bespoke column per type, the same shape as the
+ * {@code user_identities(provider, subject)} table. Kinds are free-form lowercase slugs by convention ({@code nfc-uid},
+ * {@code upc}, {@code qr}); a given {@code (kind, value)} pair claims at most one item.
  *
- * NOT the item's own ULID (which the printed QR encodes) and not an
- * {@link ItemTag} (metadata markup); this is how a scanned marker finds its
- * item.
+ * NOT the item's own ULID (which the printed QR encodes) and not an {@link ItemTag} (metadata markup); this is how a
+ * scanned marker finds its item.
  */
 public record ItemIdentity(String kind, String value) implements Comparable<ItemIdentity> {
 

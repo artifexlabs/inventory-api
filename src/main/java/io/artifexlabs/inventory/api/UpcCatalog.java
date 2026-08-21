@@ -22,11 +22,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 /**
- * External product-catalog lookup by canonical GTIN-13. The ONLY seam through
- * which this system ever calls an external service: adapters (Open Food Facts
- * family, UPCitemdb trial) live behind it, tests stub it or its HTTP
- * endpoints, and an outage degrades to {@code Optional.empty()} — lookup is
- * prefill, never a dependency of item creation.
+ * External product-catalog lookup by canonical GTIN-13. The ONLY seam through which this system ever calls an external
+ * service: adapters (Open Food Facts family, UPCitemdb trial) live behind it, tests stub it or its HTTP endpoints, and
+ * an outage degrades to {@code Optional.empty()} — lookup is prefill, never a dependency of item creation.
  */
 public interface UpcCatalog {
 

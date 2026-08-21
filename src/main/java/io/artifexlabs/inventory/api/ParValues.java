@@ -20,9 +20,8 @@ package io.artifexlabs.inventory.api;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Stocking targets for a physical item: minimum and maximum desired on-hand.
- * The current on-hand count is {@link Item#getQuantity()}; an item is below
- * par when its quantity drops under {@code minOnHand}.
+ * Stocking targets for a physical item: minimum and maximum desired on-hand. The current on-hand count is
+ * {@link Item#getQuantity()}; an item is below par when its quantity drops under {@code minOnHand}.
  *
  * @author mykel
  *
