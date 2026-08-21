@@ -20,12 +20,10 @@ package io.artifexlabs.inventory.api;
 import java.util.Optional;
 
 /**
- * GTIN normalization for identity kind {@code upc}: UPC-A (12), EAN-13 (13),
- * and EAN-8 (8) canonicalize to <b>GTIN-13</b> by leading-zero padding (the
- * GS1 check digit is right-aligned, so padding never changes it). Clients
- * expand UPC-E to UPC-A BEFORE sending — an 8-digit payload is ambiguous
- * between EAN-8 and UPC-E, and only the scanner knows its symbology; the
- * server treats 8 digits as EAN-8. Pure functions, no state.
+ * GTIN normalization for identity kind {@code upc}: UPC-A (12), EAN-13 (13), and EAN-8 (8) canonicalize to
+ * <b>GTIN-13</b> by leading-zero padding (the GS1 check digit is right-aligned, so padding never changes it). Clients
+ * expand UPC-E to UPC-A BEFORE sending — an 8-digit payload is ambiguous between EAN-8 and UPC-E, and only the scanner
+ * knows its symbology; the server treats 8 digits as EAN-8. Pure functions, no state.
  */
 public final class Gtin {
 
@@ -33,8 +31,8 @@ public final class Gtin {
   }
 
   /**
-   * Canonical GTIN-13 for a scanned code, empty when the input is not a
-   * plausible GTIN (wrong length, non-digits, bad check digit).
+   * Canonical GTIN-13 for a scanned code, empty when the input is not a plausible GTIN (wrong length, non-digits, bad
+   * check digit).
    */
   public static Optional<String> normalize(String raw) {
     if (raw == null)

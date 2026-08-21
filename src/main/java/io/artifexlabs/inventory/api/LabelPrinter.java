@@ -38,14 +38,13 @@ public interface LabelPrinter {
   // differs.
 
   /**
-   * The everyday label. Zebra: 2.25×1.25 in die-cut (QR left,
-   * name/id/type/qty/location column). Brother: the 12 mm compact strip —
-   * QR + name + printed date + weight when present, bold H when heavy.
+   * The everyday label. Zebra: 2.25×1.25 in die-cut (QR left, name/id/type/qty/location column). Brother: the 12 mm
+   * compact strip — QR + name + printed date + weight when present, bold H when heavy.
    */
   String FORMAT_STANDARD = "standard";
   /**
-   * The big label. Zebra: 2.25×4 in die-cut (room-scale QR, full field
-   * stack). Brother: the 24 mm QR + name/id wide layout.
+   * The big label. Zebra: 2.25×4 in die-cut (room-scale QR, full field stack). Brother: the 24 mm QR + name/id wide
+   * layout.
    */
   String FORMAT_LARGE = "large";
   /** Zebra die-cut 4×4 in. */
@@ -56,8 +55,8 @@ public interface LabelPrinter {
   /** Brother, any tape width: force the QR-only layout (the legacy flag). */
   String FORMAT_QR_ONLY = "qr-only";
   /**
-   * The smallest scannable label: the bare-ULID code alone — always the id,
-   * never a URL (Brother 9 mm; replaces the earlier id-only 9 mm format).
+   * The smallest scannable label: the bare-ULID code alone — always the id, never a URL (Brother 9 mm; replaces the
+   * earlier id-only 9 mm format).
    */
   String FORMAT_TINY = "tiny";
   /** The standard-size code-only label: the full-URL QR alone (Brother 12 mm, v3 at 2 dots/module). */

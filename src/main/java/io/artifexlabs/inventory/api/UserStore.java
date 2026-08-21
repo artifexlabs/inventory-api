@@ -20,10 +20,9 @@ package io.artifexlabs.inventory.api;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-
 /**
- * Credential-verifying user lookup, backing the login flow. Not part of the
- * public API: credentials are a storage concern, so this stays in impl.
+ * Credential-verifying user lookup, backing the login flow. Not part of the public API: credentials are a storage
+ * concern, so this stays in impl.
  *
  * @author mykel
  *

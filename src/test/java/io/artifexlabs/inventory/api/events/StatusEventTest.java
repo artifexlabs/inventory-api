@@ -47,8 +47,8 @@ public class StatusEventTest {
 
   @Test
   public void builderLeavesIdentityForThePublisherToStamp() {
-    StatusEvent e = StatusEvent.error("printer.tape-mismatch", "Label refused: wrong tape.")
-        .source("printer.brother").subject("itemId", "01ARZ3NDEKTSV4RRFFQ69G5FAV").build();
+    StatusEvent e = StatusEvent.error("printer.tape-mismatch", "Label refused: wrong tape.").source("printer.brother")
+        .subject("itemId", "01ARZ3NDEKTSV4RRFFQ69G5FAV").build();
     assertNull(e.id(), "id is stamped at publication, not construction");
     assertNull(e.ts(), "ts is stamped at publication, not construction");
 
@@ -61,8 +61,8 @@ public class StatusEventTest {
 
   @Test
   public void subjectIsImmutableAndSkipsNulls() {
-    StatusEvent e = StatusEvent.warning("bus.forbidden", "Not permitted.")
-        .subject("action", "items.delete").subject("requiredRole", null).build();
+    StatusEvent e = StatusEvent.warning("bus.forbidden", "Not permitted.").subject("action", "items.delete")
+        .subject("requiredRole", null).build();
     assertEquals(1, e.subject().size(), "null values are dropped, not stored");
     assertThrows(UnsupportedOperationException.class, () -> e.subject().put("x", "y"));
   }
@@ -71,9 +71,9 @@ public class StatusEventTest {
   public void wireRoundTripsEverySeverityAndField() {
     for (Severity severity : Severity.values()) {
       StatusEvent original = StatusEvent.of(severity, "printer.no-scannable-qr", "No code fits the tape.")
-          .source("printer.brother").subject("itemId", "01ARZ").subject("tapeMm", "9")
-          .detail("Use wider tape.").correlationId("req-1").actor("01USER")
-          .build().stamped("01M0EVENT", Instant.parse("2026-08-21T14:03:22.123456Z"));
+          .source("printer.brother").subject("itemId", "01ARZ").subject("tapeMm", "9").detail("Use wider tape.")
+          .correlationId("req-1").actor("01USER").build()
+          .stamped("01M0EVENT", Instant.parse("2026-08-21T14:03:22.123456Z"));
 
       StatusEvent back = StatusEvents.fromWire(StatusEvents.toWire(original));
       assertEquals(original, back, severity + " must survive the wire unchanged");

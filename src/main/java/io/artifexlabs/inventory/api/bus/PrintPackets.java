@@ -29,31 +29,25 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Addresses and wire format for reaching a printer over the event bus
- * (PLAN.md Phase 21, ask 1). A caller sends a PACKET carrying everything the
- * printer needs to produce a label; the printer answers with an
- * ACCEPTANCE, never a completion.
+ * Addresses and wire format for reaching a printer over the event bus (PLAN.md Phase 21, ask 1). A caller sends a
+ * PACKET carrying everything the printer needs to produce a label; the printer answers with an ACCEPTANCE, never a
+ * completion.
  *
  * <p>
- * This is a PROTOCOL, so it lives here beside {@link BusActions} and
- * {@link BusEnvelope} rather than with any printer implementation: anything
- * that wants to accept print packets — a print-station node, another
- * vendor's driver — should be able to speak this with only the API on its
- * classpath, never a label-rendering stack.
+ * This is a PROTOCOL, so it lives here beside {@link BusActions} and {@link BusEnvelope} rather than with any printer
+ * implementation: anything that wants to accept print packets — a print-station node, another vendor's driver — should
+ * be able to speak this with only the API on its classpath, never a label-rendering stack.
  *
  * <p>
- * <b>Why acceptance.</b> The printers speak JetDirect on TCP 9100, which is
- * unidirectional: "printed" was never knowable — the honest fact is only
- * ever "the printer took the bytes". So the reply says whether the packet
- * was accepted for printing, and the OUTCOME arrives separately as a
- * {@code StatusEvent} on {@code status.events}. That also stops an HTTP
- * request from hanging on a piece of hardware.
+ * <b>Why acceptance.</b> The printers speak JetDirect on TCP 9100, which is unidirectional: "printed" was never
+ * knowable — the honest fact is only ever "the printer took the bytes". So the reply says whether the packet was
+ * accepted for printing, and the OUTCOME arrives separately as a {@code StatusEvent} on {@code status.events}. That
+ * also stops an HTTP request from hanging on a piece of hardware.
  *
  * <p>
- * Packets are SELF-CONTAINED by default (a serialized item snapshot), so a
- * printer can be deployed somewhere storage is not. A packet carrying only
- * {@code itemId} is the documented escape hatch for callers that cannot
- * snapshot; the printer verticle then has to resolve it itself.
+ * Packets are SELF-CONTAINED by default (a serialized item snapshot), so a printer can be deployed somewhere storage is
+ * not. A packet carrying only {@code itemId} is the documented escape hatch for callers that cannot snapshot; the
+ * printer verticle then has to resolve it itself.
  */
 public final class PrintPackets {
 
@@ -103,8 +97,8 @@ public final class PrintPackets {
 
   /** A run of labels plus how they separate; see {@link LabelPrinter#printBatch}. */
   public final static JsonObject batch(List<JsonObject> labels, boolean halfCutBetween) {
-    return new JsonObject().put("v", VERSION).put("labels", new JsonArray(List.copyOf(labels)))
-        .put("halfCut", halfCutBetween);
+    return new JsonObject().put("v", VERSION).put("labels", new JsonArray(List.copyOf(labels))).put("halfCut",
+        halfCutBetween);
   }
 
   /** Attribution, so the outcome event can reach the person who asked. */
@@ -121,8 +115,8 @@ public final class PrintPackets {
     JsonObject raw = packet.getJsonObject("item");
     Item item = raw == null ? null : ItemFactory.deserialize(raw);
     String encoded = packet.getString("qrPng");
-    return new LabelPacket(item, packet.getString("itemId"), packet.getString("scanUrl"),
-        packet.getString("format"), encoded == null ? null : Base64.getDecoder().decode(encoded));
+    return new LabelPacket(item, packet.getString("itemId"), packet.getString("scanUrl"), packet.getString("format"),
+        encoded == null ? null : Base64.getDecoder().decode(encoded));
   }
 
   /** Read the labels of a batch packet, in order. */

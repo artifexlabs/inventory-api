@@ -20,9 +20,8 @@ package io.artifexlabs.inventory.api;
 import java.security.SecureRandom;
 
 /**
- * ULID generation: 26 Crockford base32 characters, 48-bit millisecond timestamp
- * prefix + 80 bits of randomness. Lexically sortable by creation time and small
- * enough for a compact QR code.
+ * ULID generation: 26 Crockford base32 characters, 48-bit millisecond timestamp prefix + 80 bits of randomness.
+ * Lexically sortable by creation time and small enough for a compact QR code.
  *
  * @author mykel
  *

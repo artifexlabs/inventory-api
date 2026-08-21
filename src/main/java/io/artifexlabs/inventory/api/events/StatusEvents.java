@@ -53,18 +53,10 @@ public final class StatusEvents {
   public final static JsonObject toWire(StatusEvent event) {
     JsonObject subject = new JsonObject();
     event.subject().forEach(subject::put);
-    return new JsonObject()
-        .put("v", VERSION)
-        .put("id", event.id())
-        .put("ts", event.ts() == null ? null : event.ts().toString())
-        .put("severity", event.severity().name())
-        .put("code", event.code())
-        .put("source", event.source())
-        .put("subject", subject)
-        .put("message", event.message())
-        .put("detail", event.detail())
-        .put("correlationId", event.correlationId())
-        .put("actor", event.actor());
+    return new JsonObject().put("v", VERSION).put("id", event.id())
+        .put("ts", event.ts() == null ? null : event.ts().toString()).put("severity", event.severity().name())
+        .put("code", event.code()).put("source", event.source()).put("subject", subject).put("message", event.message())
+        .put("detail", event.detail()).put("correlationId", event.correlationId()).put("actor", event.actor());
   }
 
   /** Inverse of {@link #toWire}; ignores the version field. */
