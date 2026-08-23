@@ -73,6 +73,18 @@ public final class BusActions {
   public final static String REGIONS_CREATE_ITEM = "regions.create-item";
   public final static String REGIONS_MAKE_ITEM = "regions.make-item";
 
+  // ---- data media (manifests: what files are on a disc or a share) -------
+  /** Replace a medium's whole manifest; archives become contained items. */
+  public final static String DATA_REPLACE_MANIFEST = "data.replace-manifest";
+  /** Correct a path without re-hashing the medium; renames descendants too. */
+  public final static String DATA_RENAME_PATH = "data.rename-path";
+  public final static String DATA_ENTRIES = "data.entries";
+  public final static String DATA_SUMMARY = "data.summary";
+  /** "Which disc has this file?" — the inventory question, asked of data. */
+  public final static String DATA_BY_HASH = "data.by-hash";
+  /** Media holding the same files at the same paths. */
+  public final static String DATA_MIRRORS = "data.mirrors";
+
   // ---- catalog (external UPC lookup — prefill, never a dependency) -------
   public final static String CATALOG_UPC = "catalog.upc";
   /** One-shot: catalog prefill + item + identity + tags + image asset. */
@@ -125,6 +137,9 @@ public final class BusActions {
       Map.entry(ASSETS_DELETE, Optional.of(Roles.WRITE)), Map.entry(REGIONS_LIST, Optional.of(Roles.READ)),
       Map.entry(REGIONS_CREATE, Optional.of(Roles.WRITE)), Map.entry(REGIONS_DELETE, Optional.of(Roles.WRITE)),
       Map.entry(REGIONS_CREATE_ITEM, Optional.of(Roles.WRITE)), Map.entry(REGIONS_MAKE_ITEM, Optional.of(Roles.WRITE)),
+      Map.entry(DATA_REPLACE_MANIFEST, Optional.of(Roles.WRITE)), Map.entry(DATA_RENAME_PATH, Optional.of(Roles.WRITE)),
+      Map.entry(DATA_ENTRIES, Optional.of(Roles.READ)), Map.entry(DATA_SUMMARY, Optional.of(Roles.READ)),
+      Map.entry(DATA_BY_HASH, Optional.of(Roles.READ)), Map.entry(DATA_MIRRORS, Optional.of(Roles.READ)),
       Map.entry(CATALOG_UPC, Optional.of(Roles.READ)), Map.entry(CATALOG_CREATE_ITEM, Optional.of(Roles.WRITE)),
       Map.entry(AUDIT_RECENT, Optional.of(Roles.ADMIN)), Map.entry(AUDIT_BY_TARGET, Optional.of(Roles.READ)),
       Map.entry(LABELS_QR, Optional.of(Roles.READ)), Map.entry(LABELS_PRINT, Optional.of(Roles.WRITE)),

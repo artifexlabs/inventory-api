@@ -29,22 +29,48 @@ import io.vertx.core.json.JsonObject;
  * @author mykel
  *
  */
-public record DataInfo(MediaKind kind, boolean mutable, boolean archive) {
+public record DataInfo(MediaKind kind, boolean mutable, boolean archive, String locator) {
 
   /** A plain physical object; mutable/archive do not apply. */
-  public final static DataInfo OBJECT = new DataInfo(MediaKind.OBJECT, false, false);
+  public final static DataInfo OBJECT = new DataInfo(MediaKind.OBJECT, false, false, null);
 
   public DataInfo {
     requireNonNull(kind, "kind");
+    if (locator != null) {
+      locator = locator.trim();
+      if (locator.isEmpty())
+        locator = null;
+    }
+  }
+
+  /** Without a locator; the common case for a disc you hold in your hand. */
+  public DataInfo(MediaKind kind, boolean mutable, boolean archive) {
+    this(kind, mutable, archive, null);
+  }
+
+  /**
+   * Where this medium is reached when it is not simply in your hands: a mount point, share URI, volume label, or
+   * bucket. Free text on purpose — it names things this system does not manage and cannot verify.
+   */
+  public java.util.Optional<String> where() {
+    return java.util.Optional.ofNullable(this.locator);
+  }
+
+  /** True when this item's contents can be described by a manifest at all. */
+  public boolean holdsData() {
+    return this.kind != MediaKind.OBJECT;
   }
 
   public JsonObject toJson() {
-    return new JsonObject().put("kind", kind.name()).put("mutable", mutable).put("archive", archive);
+    JsonObject j = new JsonObject().put("kind", kind.name()).put("mutable", mutable).put("archive", archive);
+    if (locator != null)
+      j.put("locator", locator);
+    return j;
   }
 
   public static DataInfo fromJson(JsonObject j) {
     return j == null ? null
         : new DataInfo(MediaKind.valueOf(j.getString("kind")), Boolean.TRUE.equals(j.getBoolean("mutable")),
-            Boolean.TRUE.equals(j.getBoolean("archive")));
+            Boolean.TRUE.equals(j.getBoolean("archive")), j.getString("locator"));
   }
 }

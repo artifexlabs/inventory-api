@@ -18,6 +18,8 @@
 package io.artifexlabs.inventory.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -45,5 +47,18 @@ public class DataInfoTest {
   public void testPlainObjectKind() {
     assertEquals(MediaKind.OBJECT, DataInfo.OBJECT.kind());
     assertEquals(DataInfo.OBJECT, DataInfo.fromJson(DataInfo.OBJECT.toJson()));
+  }
+
+  @Test
+  public void aLocatorSaysWhereAMediumIsReachedWhenItIsNotInYourHand() {
+    DataInfo share = new DataInfo(MediaKind.REMOTE_STORAGE, true, false, "  smb://nas/backups  ");
+    assertEquals("smb://nas/backups", share.where().orElse(null), "trimmed, and it round-trips");
+    assertEquals(share, DataInfo.fromJson(share.toJson()));
+
+    // a disc you hold needs no locator, and blank is the same as absent
+    assertTrue(new DataInfo(MediaKind.PHYSICAL_MEDIA, false, false).where().isEmpty());
+    assertTrue(new DataInfo(MediaKind.PHYSICAL_MEDIA, false, false, "   ").where().isEmpty());
+    assertFalse(DataInfo.OBJECT.holdsData(), "a crate has no files");
+    assertTrue(new DataInfo(MediaKind.PHYSICAL_MEDIA, false, false).holdsData());
   }
 }
