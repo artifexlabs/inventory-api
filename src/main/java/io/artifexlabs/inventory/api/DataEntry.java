@@ -47,18 +47,32 @@ import io.vertx.core.json.JsonObject;
  * <b>Paths are scope-relative and normalized:</b> {@code /}-separated, no leading slash, no {@code .} or {@code ..}
  * segments, no empty segments. The medium's own name is never part of a path — that is what lets two media be compared
  * for mirror-ness at all.
+ *
+ * <p>
+ * <b>{@link #hash()} may be null, and usually is at first.</b> A manifest describes what EXISTS; hashing it reads every
+ * byte. {@code find} describes a 120 TB tree in minutes and hashing it takes weeks, so an entry's normal early state is
+ * "known to exist, not yet hashed" — the async hasher fills it in later. {@link #hashAlgorithm()} is null exactly when
+ * {@code hash} is. A hash that is PRESENT but malformed is still refused: that is a producer bug, not a pending state.
  */
 public record DataEntry(String path, long sizeBytes, HashAlgorithm hashAlgorithm, String hash, String mimeType,
     Instant modifiedAt, List<DataEntry> archiveContents) {
 
   public DataEntry {
     path = normalizePath(path);
-    requireNonNull(hashAlgorithm, "hashAlgorithm");
-    if (hash == null || hash.isBlank())
-      throw new IllegalArgumentException("a data entry requires a content hash");
-    hash = hash.trim().toLowerCase(Locale.ROOT);
-    if (!hashAlgorithm.accepts(hash))
-      throw new IllegalArgumentException("hash is not a valid " + hashAlgorithm.algorithmName() + " digest: " + hash);
+    // A manifest now arrives BEFORE its contents are hashed: `find` describes a
+    // 120 TB tree in minutes, hashing it takes weeks. So a null hash is the
+    // normal early state of a real entry, not a malformed one. What stays
+    // refused is a hash that is present and wrong — a bad digest is still a
+    // producer bug, and saying so here names the offending entry.
+    if (hash == null || hash.isBlank()) {
+      hash = null;
+      hashAlgorithm = null;
+    } else {
+      requireNonNull(hashAlgorithm, "hashAlgorithm");
+      hash = hash.trim().toLowerCase(Locale.ROOT);
+      if (!hashAlgorithm.accepts(hash))
+        throw new IllegalArgumentException("hash is not a valid " + hashAlgorithm.algorithmName() + " digest: " + hash);
+    }
     if (sizeBytes < 0)
       throw new IllegalArgumentException("sizeBytes cannot be negative");
     if (mimeType != null) {
@@ -82,6 +96,12 @@ public record DataEntry(String path, long sizeBytes, HashAlgorithm hashAlgorithm
     if (raw == null || raw.isBlank())
       throw new IllegalArgumentException("a data entry requires a path");
     String cleaned = raw.trim().replace('\\', '/');
+    // ONE trailing slash is meaning, not noise: it marks a DIRECTORY. Only empty
+    // directories ever need saying out loud — a non-empty one is implied by the
+    // paths beneath it — but without a way to say it, two media differing only
+    // by an empty folder produce identical structure hashes and are reported as
+    // the same. `find -type d -empty -printf '%p/\n'` emits exactly this.
+    boolean directory = cleaned.length() > 1 && cleaned.endsWith("/");
     while (cleaned.startsWith("./"))
       cleaned = cleaned.substring(2);
     StringBuilder out = new StringBuilder(cleaned.length());
@@ -96,7 +116,16 @@ public record DataEntry(String path, long sizeBytes, HashAlgorithm hashAlgorithm
     }
     if (out.length() == 0)
       throw new IllegalArgumentException("a data entry requires a path");
-    return out.toString();
+    return directory ? out + "/" : out.toString();
+  }
+
+  /**
+   * True when this entry names a directory rather than a file — the trailing-slash convention every filesystem tool
+   * already uses. Only EMPTY directories need to appear in a manifest at all; the rest are implied by the paths below
+   * them.
+   */
+  public boolean isDirectory() {
+    return this.path.endsWith("/");
   }
 
   /** The path split into the components a normalized path is made of. */
@@ -135,8 +164,12 @@ public record DataEntry(String path, long sizeBytes, HashAlgorithm hashAlgorithm
   }
 
   public JsonObject toJson() {
-    JsonObject j = new JsonObject().put("path", this.path).put("sizeBytes", this.sizeBytes)
-        .put("hashAlgorithm", this.hashAlgorithm.algorithmName()).put("hash", this.hash);
+    JsonObject j = new JsonObject().put("path", this.path).put("sizeBytes", this.sizeBytes);
+    // both null together: an entry that exists but has not been hashed yet. The
+    // keys are omitted rather than sent as null so "not yet hashed" and "hashed
+    // to null" cannot be confused on the wire.
+    if (this.hash != null)
+      j.put("hashAlgorithm", this.hashAlgorithm.algorithmName()).put("hash", this.hash);
     if (this.mimeType != null)
       j.put("mimeType", this.mimeType);
     if (this.modifiedAt != null)
