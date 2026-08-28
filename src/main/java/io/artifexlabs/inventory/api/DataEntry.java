@@ -20,6 +20,7 @@ package io.artifexlabs.inventory.api;
 import static java.util.Objects.requireNonNull;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -80,6 +81,14 @@ public record DataEntry(String path, long sizeBytes, HashAlgorithm hashAlgorithm
       if (mimeType.isEmpty())
         mimeType = null;
     }
+    // Microseconds, ALWAYS. A filesystem reports nanoseconds; timestamptz
+    // stores micros; and "is this still the same file" is an mtime EQUALITY
+    // check between the two. Left untruncated, every file on an APFS or ext4
+    // medium is refused as changed the moment its manifest round-trips through
+    // Postgres — the truncatedTo(MICROS) lesson, in the one comparison the
+    // in-memory twin could never see.
+    if (modifiedAt != null)
+      modifiedAt = modifiedAt.truncatedTo(ChronoUnit.MICROS);
     archiveContents = archiveContents == null ? List.of() : List.copyOf(archiveContents);
   }
 

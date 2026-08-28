@@ -135,6 +135,13 @@ public interface DataHashing {
    * not need to re-stat, and cannot accidentally verify against a fresher description than the one it claimed.
    */
   record PendingFile(String path, long sizeBytes, Instant modifiedAt) {
+
+    public PendingFile {
+      // micros, matching DataEntry: this record's whole job is to be compared
+      // against a stored description, and timestamptz holds micros
+      if (modifiedAt != null)
+        modifiedAt = modifiedAt.truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+    }
   }
 
   /**

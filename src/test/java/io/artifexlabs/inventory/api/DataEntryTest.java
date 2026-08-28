@@ -41,6 +41,16 @@ public class DataEntryTest {
   }
 
   @Test
+  public void modifiedTimeIsTruncatedToMicrosBecauseTimestamptzHoldsMicros() {
+    java.time.Instant nanos = java.time.Instant.parse("2026-08-01T00:00:00.123456789Z");
+    DataEntry e = new DataEntry("a.txt", 1L, null, null, null, nanos, java.util.List.of());
+    org.junit.jupiter.api.Assertions.assertEquals(java.time.Instant.parse("2026-08-01T00:00:00.123456Z"),
+        e.modifiedAt(),
+        "a filesystem reports nanoseconds and Postgres stores micros; comparing the two raw refuses every file "
+            + "as changed");
+  }
+
+  @Test
   public void pathsNormalizeToOneSpelling() {
     // the same file, described four ways by four different producers
     assertEquals("docs/readme.md", entry("docs/readme.md").path());
