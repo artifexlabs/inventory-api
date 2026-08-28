@@ -82,8 +82,19 @@ public final class BusActions {
   public final static String DATA_SUMMARY = "data.summary";
   /** "Which disc has this file?" — the inventory question, asked of data. */
   public final static String DATA_BY_HASH = "data.by-hash";
-  /** Media holding the same files at the same paths. */
-  public final static String DATA_MIRRORS = "data.mirrors";
+  /** How much each other medium has in common with this one — four numbers and two flags, not a wall of rows. */
+  public final static String DATA_OVERLAP = "data.overlap";
+  /** What this medium could not read, and which sibling media can supply it. */
+  public final static String DATA_REPAIRS = "data.repairs";
+  /** Recompute this medium's directory rollup. A write: it rewrites every directory row the medium owns. */
+  public final static String DATA_ROLLUP = "data.rollup";
+  /** How far along hashing this medium is — the progress bar for a job measured in weeks. */
+  public final static String DATA_PROGRESS = "data.progress";
+  /**
+   * Subtrees that occur in more than one place. Unlike every other data action, the target id is OPTIONAL: with one the
+   * answer is "where else is this medium's content", without one it is the whole inventory's duplication.
+   */
+  public final static String DATA_SECTIONS = "data.sections";
 
   // ---- catalog (external UPC lookup — prefill, never a dependency) -------
   public final static String CATALOG_UPC = "catalog.upc";
@@ -139,7 +150,9 @@ public final class BusActions {
       Map.entry(REGIONS_CREATE_ITEM, Optional.of(Roles.WRITE)), Map.entry(REGIONS_MAKE_ITEM, Optional.of(Roles.WRITE)),
       Map.entry(DATA_REPLACE_MANIFEST, Optional.of(Roles.WRITE)), Map.entry(DATA_RENAME_PATH, Optional.of(Roles.WRITE)),
       Map.entry(DATA_ENTRIES, Optional.of(Roles.READ)), Map.entry(DATA_SUMMARY, Optional.of(Roles.READ)),
-      Map.entry(DATA_BY_HASH, Optional.of(Roles.READ)), Map.entry(DATA_MIRRORS, Optional.of(Roles.READ)),
+      Map.entry(DATA_BY_HASH, Optional.of(Roles.READ)), Map.entry(DATA_OVERLAP, Optional.of(Roles.READ)),
+      Map.entry(DATA_REPAIRS, Optional.of(Roles.READ)), Map.entry(DATA_ROLLUP, Optional.of(Roles.WRITE)),
+      Map.entry(DATA_PROGRESS, Optional.of(Roles.READ)), Map.entry(DATA_SECTIONS, Optional.of(Roles.READ)),
       Map.entry(CATALOG_UPC, Optional.of(Roles.READ)), Map.entry(CATALOG_CREATE_ITEM, Optional.of(Roles.WRITE)),
       Map.entry(AUDIT_RECENT, Optional.of(Roles.ADMIN)), Map.entry(AUDIT_BY_TARGET, Optional.of(Roles.READ)),
       Map.entry(LABELS_QR, Optional.of(Roles.READ)), Map.entry(LABELS_PRINT, Optional.of(Roles.WRITE)),

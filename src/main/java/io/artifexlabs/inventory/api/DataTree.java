@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Derives a medium's directory tree from its flat manifest.
@@ -49,6 +50,24 @@ public final class DataTree {
    * deep, thin, thousand-file tree look like a one-file directory.
    */
   public record Node(String path, int depth, byte[] structureHash, long subtreeFiles, long subtreeBytes) {
+  }
+
+  /**
+   * What a directory's CONTENT says about it, once bytes have been read. The structural half ({@link Node}) exists the
+   * moment a manifest lands; this half arrives weeks later, one hashed file at a time, which is why it is a separate
+   * pass over the same tree rather than more fields on the same record.
+   *
+   * <p>
+   * {@code merkleHash} and {@code merkleContentHash} are null while {@code pendingFiles} is above zero: a subtree whose
+   * bytes are half read has no content identity yet, and inventing one from the half that finished would be a digest
+   * that changes meaning as the run proceeds.
+   *
+   * <p>
+   * {@code unreadableHash} is null when nothing below is damaged, so "identically damaged" is one column compare and
+   * "damaged at all" is a null check.
+   */
+  public record Rollup(String path, byte[] merkleHash, byte[] merkleContentHash, byte[] unreadableHash,
+      long pendingFiles, long unreadableFiles) {
   }
 
   private DataTree() {
@@ -107,6 +126,101 @@ public final class DataTree {
       }
     }
     return List.copyOf(built.values());
+  }
+
+  /**
+   * The CONTENT pass over the same tree: Merkle identity, its name-independent variant, and the shape of whatever could
+   * not be read.
+   *
+   * <p>
+   * Deliberately a pure function of the manifest plus the damage set, computed in the api where both backends call the
+   * same code. A rollup recomputed from ground truth is also why decision 1 could reject an incremental per-file
+   * counter: at 50M files that counter costs 91x the writes and makes the root a row every hasher contends on, and
+   * crash recovery here is free because nothing is remembered between runs.
+   *
+   * @param unreadable manifest paths the worker could not read; they contribute to {@code unreadableHash} and to
+   *                   nothing else, because a file with no bytes has no content to fold
+   */
+  public static List<Rollup> roll(HashAlgorithm algorithm, List<DataEntry> entries, Set<String> unreadable) {
+    Set<String> damaged = unreadable == null ? Set.of() : unreadable;
+    Map<String, List<byte[]>> merkle = new HashMap<>();
+    Map<String, List<byte[]>> content = new HashMap<>();
+    Map<String, List<byte[]>> damage = new HashMap<>();
+    Map<String, long[]> counts = new HashMap<>(); // path -> {pending, unreadable}
+    seed(merkle, content, damage, counts, "");
+
+    for (DataEntry entry : entries) {
+      String path = entry.path();
+      if (path.endsWith("/")) {
+        // an empty directory has no bytes, so it is neither pending nor damaged
+        for (String d : selfAndAncestors(path.substring(0, path.length() - 1)))
+          seed(merkle, content, damage, counts, d);
+        continue;
+      }
+      int cut = path.lastIndexOf('/');
+      String parent = cut < 0 ? "" : path.substring(0, cut);
+      String name = cut < 0 ? path : path.substring(cut + 1);
+      for (String d : selfAndAncestors(parent))
+        seed(merkle, content, damage, counts, d);
+      if (damaged.contains(path)) {
+        for (String d : selfAndAncestors(parent))
+          counts.get(d)[1]++;
+        damage.get(parent).add(MerkleHash.damageOfFile(algorithm, name));
+        continue;
+      }
+      if (entry.hash() == null) {
+        // not yet read: it makes every directory above it uncomputable, which is
+        // exactly the property that lets a rollup run at any moment
+        for (String d : selfAndAncestors(parent))
+          counts.get(d)[0]++;
+        continue;
+      }
+      byte[] bytes = decode(entry.hash());
+      merkle.get(parent).add(MerkleHash.merkleOfFile(algorithm, name, bytes));
+      content.get(parent).add(bytes);
+    }
+
+    List<String> order = new ArrayList<>(counts.keySet());
+    order.sort(Comparator.comparingInt(DataTree::depthOf).reversed().thenComparing(Comparator.naturalOrder()));
+
+    Map<String, Rollup> built = new LinkedHashMap<>();
+    for (String dir : order) {
+      long[] c = counts.get(dir);
+      boolean computable = c[0] == 0;
+      byte[] m = computable ? MerkleHash.structureOfDir(algorithm, merkle.get(dir)) : null;
+      byte[] o = computable ? MerkleHash.structureOfDir(algorithm, content.get(dir)) : null;
+      byte[] u = damage.get(dir).isEmpty() ? null : MerkleHash.structureOfDir(algorithm, damage.get(dir));
+      built.put(dir, new Rollup(dir, m, o, u, c[0], c[1]));
+      if (dir.isEmpty())
+        continue;
+      int cut = dir.lastIndexOf('/');
+      String parent = cut < 0 ? "" : dir.substring(0, cut);
+      // a subdirectory contributes its digest unqualified by its own name — see
+      // MerkleHash: a folder's identity is what it holds, not what it is called
+      if (m != null) {
+        merkle.get(parent).add(m);
+        content.get(parent).add(o);
+      }
+      if (u != null)
+        damage.get(parent).add(u);
+    }
+    return List.copyOf(built.values());
+  }
+
+  private static void seed(Map<String, List<byte[]>> merkle, Map<String, List<byte[]>> content,
+      Map<String, List<byte[]>> damage, Map<String, long[]> counts, String dir) {
+    merkle.computeIfAbsent(dir, k -> new ArrayList<>());
+    content.computeIfAbsent(dir, k -> new ArrayList<>());
+    damage.computeIfAbsent(dir, k -> new ArrayList<>());
+    counts.computeIfAbsent(dir, k -> new long[2]);
+  }
+
+  /** Hex digest to bytes. DataEntry already validated the shape, so anything else here is a bug, not input. */
+  private static byte[] decode(String hex) {
+    byte[] out = new byte[hex.length() / 2];
+    for (int i = 0; i < out.length; i++)
+      out[i] = (byte) Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
+    return out;
   }
 
   /** Create this directory and every ancestor, so the tree has no holes even when only deep files were listed. */

@@ -78,10 +78,26 @@ public interface DataSystem {
   CompletionStage<List<DataLocation>> findByHash(HashAlgorithm algorithm, String hash);
 
   /**
-   * Media that hold the same file at the same path as {@code itemId} — the mirror question. Both halves are compared as
-   * stored hashes, so this never walks a path string.
+   * Media that overlap this one, most-shared first — "how much of this disc do I already have somewhere else?".
+   *
+   * <p>
+   * <b>This replaces {@code findMirrorsOf}, and the difference is the return type, not the rule.</b> The old call
+   * answered a per-MEDIUM question with per-FILE rows: millions of them, to say what turns out to be four numbers and
+   * two flags. It was a Parallel Seq Scan at every measured scale — 155 ms at 551k rows, 5,528 ms at 5.5M, and a
+   * composite index moved it by 0.9x to 1.5x, because the mismatch was the shape of the answer rather than a missing
+   * index.
+   *
+   * <p>
+   * <b>Sameness here is still path AND content</b>, deliberately. That rule did not stop being useful; it stopped being
+   * the ONLY rule. "Is this disc a faithful copy of that one" wants it — a file that moved is not in the same place —
+   * while {@link #findDuplicateSections} exists precisely to ignore location. Both rules are now expressed, each where
+   * it belongs.
+   *
+   * <p>
+   * Overlap is computed from content digests, so a medium nobody has hashed yet overlaps nothing. That is not a gap:
+   * {@code findDuplicateSections(STRUCTURE)} answers the same shape of question from the manifest alone, weeks earlier.
    */
-  CompletionStage<List<DataLocation>> findMirrorsOf(String itemId);
+  CompletionStage<List<MediumOverlap>> findOverlappingMedia(String itemId);
 
   /**
    * Directory subtrees that appear more than once — "where are there duplicated sections in my media inventory?".
@@ -163,5 +179,23 @@ public interface DataSystem {
 
   /** Where a particular file was found: which medium item, at which path. */
   record DataLocation(String itemId, String itemName, String path, long sizeBytes) {
+  }
+
+  /**
+   * How much another medium has in common with this one.
+   *
+   * <p>
+   * The three cases the old per-file return type conflated are now distinguishable. {@code identical} means the two
+   * root Merkle digests are equal — the same tree, by name and content, all the way down. {@code contains} means every
+   * hashed entry of OURS is also on theirs, so theirs is the superset: that is the "which backup is newer" answer, and
+   * it is true whenever {@code identical} is. Neither flag set, with {@code sharedEntries} above zero, is partial
+   * overlap.
+   *
+   * @param sharedEntries files at the same path with the same digest on both media
+   * @param theirEntries  hashed files on the other medium, so the caller can see how much of it is NOT shared
+   * @param ourEntries    hashed files on this one, which is what {@code contains} is measured against
+   */
+  record MediumOverlap(String itemId, String itemName, long sharedEntries, long sharedBytes, long theirEntries,
+      long ourEntries, boolean identical, boolean contains) {
   }
 }

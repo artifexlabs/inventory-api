@@ -46,7 +46,23 @@ import java.util.List;
  *
  *   contentOnly(f) = content(f)                               -- rename-surviving
  *   contentOnly(D) = H("tree" ‖ sorted[contentOnly(c)])
+ *
+ *   damage(f)    = H("gone" ‖ len(name)‖name)                  -- a file that could not be read
+ *   damage(D)    = H("tree" ‖ sorted[damage(c)])               -- null when nothing below is damaged
  * </pre>
+ *
+ * <p>
+ * <b>A directory's own NAME is in none of them.</b> Only file names are. That is deliberate and it is what makes a
+ * folder that was moved AND renamed still match its twin — the identity of a directory is what it holds, not what it is
+ * called. {@code Match.CONTENT} then goes one step further and drops file names too.
+ *
+ * <p>
+ * <b>Why damage has its own digest.</b> An unreadable file is simply absent from {@code merkle(D)} — it has no content
+ * to contribute. So a damaged directory and an intact one holding only the readable half hash identically, and
+ * comparing merkles alone would call them copies. The damage digest is the other half of that comparison: equal merkles
+ * AND equal damage means genuinely the same, equal merkles and different damage means one of them is missing something
+ * the other has. That makes partial equality sound BY CONSTRUCTION rather than by every query remembering to check a
+ * flag.
  *
  * <p>
  * <b>Why each rule is here.</b> Get any of them wrong and the hashes are confidently useless:
@@ -58,7 +74,7 @@ import java.util.List;
  * <li><b>Sorting by child HASH bytes,</b> unsigned. The name is already inside each child's digest, so this
  * discriminates exactly as well as sorting by name while letting a parent hold only hashes. Crucially it never consults
  * locale collation or Unicode normalization, either of which would make the same tree hash differently on two machines.
- * <li><b>Size in the structure digest</b> (decision 2, DATA_MERKLE.md): free, since size is already in the manifest,
+ * <li><b>Size in the structure digest</b> (decision 2, PLAN.md Phase 23): free, since size is already in the manifest,
  * and it breaks up the coincidental matches that dominate a real tree — 46.7% of measured directories hold two files or
  * fewer, and 7,492 held nothing but a {@code pom.xml}.
  * </ul>
@@ -71,6 +87,7 @@ public final class MerkleHash {
 
   private final static byte[] BLOB = "blob".getBytes(StandardCharsets.US_ASCII);
   private final static byte[] TREE = "tree".getBytes(StandardCharsets.US_ASCII);
+  private final static byte[] GONE = "gone".getBytes(StandardCharsets.US_ASCII);
 
   /** Unsigned lexicographic order over digests — Java's byte is signed, which would sort 0x80.. before 0x00.. */
   private final static Comparator<byte[]> UNSIGNED = (a, b) -> {
@@ -111,9 +128,25 @@ public final class MerkleHash {
   }
 
   /**
-   * Fold a directory's children into one digest. Works for all three flavours — pass structure hashes to get a
-   * structure hash, merkle hashes to get a merkle hash, bare content digests to get the rename-surviving variant. The
-   * caller's choice of what to put in decides what comes out, which is why there is one method and not three.
+   * An unreadable file's contribution to its directory's damage identity: its name, and the fact that it is missing.
+   *
+   * <p>
+   * Fold these with {@link #structureOfDir} exactly as the other flavours are folded, and pass a subdirectory's own
+   * damage digest up unchanged — a directory name is not part of any digest here, so damage stays comparable across a
+   * relocated copy for the same reason content does.
+   */
+  public static byte[] damageOfFile(HashAlgorithm algorithm, String name) {
+    ByteArrayOutputStream buf = new ByteArrayOutputStream();
+    write(buf, GONE);
+    writeLengthPrefixed(buf, name.getBytes(StandardCharsets.UTF_8));
+    return digest(algorithm, buf.toByteArray());
+  }
+
+  /**
+   * Fold a directory's children into one digest. Works for all four flavours — pass structure hashes to get a structure
+   * hash, merkle hashes to get a merkle hash, bare content digests to get the rename-surviving variant, or
+   * {@link #damageOfFile} results to get a damage digest. The caller's choice of what to put in decides what comes out,
+   * which is why there is one method and not four.
    *
    * <p>
    * An empty collection is legal and meaningful: it is the digest of an empty directory.
